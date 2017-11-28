@@ -13,18 +13,12 @@ import specifications.AlgorithmService;
 import specifications.RequireAlgorithmService;
 
 import data.Position;
-import javafx.scene.effect.Lighting;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Engine implements EngineService, RequireDataService, RequireAlgorithmService{
   private Timer engineClock;
@@ -53,7 +47,8 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
   public void start(){
     algorithm.activation();
     engineClock.schedule(new TimerTask(){
-      public void run() {
+      @Override
+	public void run() {
     	  
     	  start++;
     	  if(start>2)
@@ -70,7 +65,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		data.addKnownPositions(data.getRobotPosition().x,data.getRobotPosition().y+1,moveDownCheck());//down
     	
     	
-        algorithm.stepActionEmptyRoom();
+        algorithm.stepActionEmptyRoomV2();
         
         data.setStepNumber(data.getStepNumber()+1);
         

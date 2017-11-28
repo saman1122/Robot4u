@@ -14,18 +14,10 @@ import specifications.RequireReadService;
 import specifications.StartEngineService;
 import specifications.RequireStartEngineService;
 
-import java.awt.event.MouseListener;
-
-import javax.swing.JButton;
-
 import data.Position;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
 import javafx.scene.effect.Lighting;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 

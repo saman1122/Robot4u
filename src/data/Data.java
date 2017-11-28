@@ -7,16 +7,8 @@
 package data;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadLocalRandom;
-
 import specifications.DataService;
-import tools.HardCodedParameters;
 
 public class Data implements DataService{
   //private Heroes hercules;
