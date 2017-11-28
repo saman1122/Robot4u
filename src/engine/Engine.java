@@ -18,6 +18,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -55,21 +58,16 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
     	  start++;
     	  if(start>2)
     	  {
-    	  System.out.println("\n --------Heroes position: "+data.getHeroesPosition().x+", "+data.getHeroesPosition().y);
-    	data.addCheckedPositions(data.getHeroesPosition().x,data.getHeroesPosition().y);
+    	  System.out.println("\n --------Heroes position: "+data.getRobotPosition().x+", "+data.getRobotPosition().y);
+    	data.addCheckedPositions(data.getRobotPosition().x,data.getRobotPosition().y);
     	
-    	
-    	System.out.print(moveLeftCheck());
-    	System.out.print(moveUpCheck());
-    	System.out.print(moveDownCheck());
-    	System.out.print(moveRightCheck());
-    	data.addKnownPositions(
-    			data.getHeroesPosition().x,data.getHeroesPosition().y,1,//position
-    			data.getHeroesPosition().x-1,data.getHeroesPosition().y,moveLeftCheck(),//left
-    			data.getHeroesPosition().x,data.getHeroesPosition().y-1,moveUpCheck(),//up
-    			data.getHeroesPosition().x+1,data.getHeroesPosition().y,moveRightCheck(),//right
-    			data.getHeroesPosition().x,data.getHeroesPosition().y+1,moveDownCheck()//down
-    			);
+
+    	//ajoute coordonnées à la map (x,y,state) | state : 0 = obstacle | state : 1 = non connu | state : 2 = connu
+    	data.addKnownPositions(data.getRobotPosition().x,data.getRobotPosition().y,2);//current position
+    	data.addKnownPositions(data.getRobotPosition().x-1,data.getRobotPosition().y,moveLeftCheck());//left
+		data.addKnownPositions(data.getRobotPosition().x,data.getRobotPosition().y-1,moveUpCheck());//up
+		data.addKnownPositions(data.getRobotPosition().x+1,data.getRobotPosition().y,moveRightCheck());//right
+		data.addKnownPositions(data.getRobotPosition().x,data.getRobotPosition().y+1,moveDownCheck());//down
     	
     	
         algorithm.stepActionEmptyRoom();
@@ -78,10 +76,12 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
         
         System.out.print(" \n positions known \n");
         
-        Set<Integer> keys = data.getKnownPositions().keySet();
+        Set<Entry<Position,Integer>> set = data.getKnownPositions().entrySet();
+        Iterator<Map.Entry<Position, Integer>> it = set.iterator();
 
-        for(int key: keys){
-            System.out.println("coord : "+data.getKnownPositions().get(key).x+","+data.getKnownPositions().get(key).y+" état : "+ key);
+        while(it.hasNext()){
+           Map.Entry<Position, Integer> entry = it.next();
+           System.out.println("coord : "+entry.getKey().x+","+entry.getKey().y+"  etat : "+entry.getValue());
         }
         
         System.out.println(" \n pos checked");
@@ -98,93 +98,93 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
   
   @Override
   public void moveL(){
-    data.setHeroesPosition(new Position(data.getHeroesPosition().x-1,data.getHeroesPosition().y));
+    data.setRobotPosition(new Position(data.getRobotPosition().x-1,data.getRobotPosition().y));
   }
   
   @Override
   public void moveR(){
-    data.setHeroesPosition(new Position(data.getHeroesPosition().x+1,data.getHeroesPosition().y));
+    data.setRobotPosition(new Position(data.getRobotPosition().x+1,data.getRobotPosition().y));
   }
   
   @Override
   public void moveU(){
-    data.setHeroesPosition(new Position(data.getHeroesPosition().x,data.getHeroesPosition().y-1));
+    data.setRobotPosition(new Position(data.getRobotPosition().x,data.getRobotPosition().y-1));
   }
   
   @Override
   public void moveD(){
-    data.setHeroesPosition(new Position(data.getHeroesPosition().x,data.getHeroesPosition().y+1));
+    data.setRobotPosition(new Position(data.getRobotPosition().x,data.getRobotPosition().y+1));
   }
   
   @Override
   public int moveLeftCheck(){
 	  int r;
-	  if(data.getHeroesPosition().x > data.getMapMinX())
+	  if(data.getRobotPosition().x > data.getMapMinX())
 	  {
-		  r=0;
+		  r=1;
 		  for(Position p : data.getCheckedPositions()){
-			 if(p.x==data.getHeroesPosition().x-1 && p.y==data.getHeroesPosition().y)
-				 r=1;
+			 if(p.x==data.getRobotPosition().x-1 && p.y==data.getRobotPosition().y)
+				 r=2;
 		  }
 	  }
 	  else
-		  r= 2;
+		  r= 0;
 	  return r;
   }
   
   @Override
   public int moveRightCheck(){
 	  int r;
-	  if(data.getHeroesPosition().x < data.getMapMaxX())
+	  if(data.getRobotPosition().x < data.getMapMaxX())
 	  {
-		  r=0;
+		  r=1;
 		  for(Position p : data.getCheckedPositions()){
-			 if(p.x==data.getHeroesPosition().x+1 && p.y==data.getHeroesPosition().y)
-				 r=1;
+			 if(p.x==data.getRobotPosition().x+1 && p.y==data.getRobotPosition().y)
+				 r=2;
 		  }
 	  }
 	  else
-		  r= 2;
+		  r= 0;
 	  return r;
   }
   
   @Override
   public int moveUpCheck(){
 	  int r;
-	  if(data.getHeroesPosition().y > data.getMapMinY())
+	  if(data.getRobotPosition().y > data.getMapMinY())
 	  {
-		  r=0;
+		  r=1;
 		  for(Position p : data.getCheckedPositions()){
-			 if(p.x==data.getHeroesPosition().x && p.y==data.getHeroesPosition().y-1)
-				 r=1;
+			 if(p.x==data.getRobotPosition().x && p.y==data.getRobotPosition().y-1)
+				 r=2;
 		  }
 	  }
 	  else
-		  r= 2;
+		  r= 0;
 	  return r;
   }
   
   @Override
   public int moveDownCheck(){
 	  int r;
-	  if(data.getHeroesPosition().y < data.getMapMaxY())
+	  if(data.getRobotPosition().y < data.getMapMaxY())
 	  {
-		  r=0;
+		  r=1;
 		  for(Position p : data.getCheckedPositions()){
-			 if(p.x==data.getHeroesPosition().x && p.y==data.getHeroesPosition().y+1)
-				 r=1;
+			 if(p.x==data.getRobotPosition().x && p.y==data.getRobotPosition().y+1)
+				 r=2;
 		  }
 	  }
 	  else
-		  r= 2;
+		  r= 0;
 	  return r;
   }
   
   @Override
   public boolean moveLeft(){
-	  if(data.getHeroesPosition().x > data.getMapMinX())
+	  if(data.getRobotPosition().x > data.getMapMinX())
 	  {
-    data.setHeroesPosition(new Position(data.getHeroesPosition().x-1,data.getHeroesPosition().y));
+    data.setRobotPosition(new Position(data.getRobotPosition().x-1,data.getRobotPosition().y));
     return true;
 	  }
 	  else
@@ -193,9 +193,9 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
   
   @Override
   public boolean moveRight(){
-	  if(data.getHeroesPosition().x < data.getMapMaxX())
+	  if(data.getRobotPosition().x < data.getMapMaxX())
 	  {
-    data.setHeroesPosition(new Position(data.getHeroesPosition().x+1,data.getHeroesPosition().y));
+    data.setRobotPosition(new Position(data.getRobotPosition().x+1,data.getRobotPosition().y));
     return true;
 	  }
 	  else
@@ -204,9 +204,9 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
   
   @Override
   public boolean moveUp(){
-	  if(data.getHeroesPosition().y > data.getMapMinY())
+	  if(data.getRobotPosition().y > data.getMapMinY())
 	  {
-    data.setHeroesPosition(new Position(data.getHeroesPosition().x,data.getHeroesPosition().y+1));
+    data.setRobotPosition(new Position(data.getRobotPosition().x,data.getRobotPosition().y+1));
     return true;
 	  }
 	  else
@@ -215,48 +215,14 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
   
   @Override
   public boolean moveDown(){
-	  if(data.getHeroesPosition().y < data.getMapMaxY())
+	  if(data.getRobotPosition().y < data.getMapMaxY())
 	  {
-    data.setHeroesPosition(new Position(data.getHeroesPosition().x,data.getHeroesPosition().y-1));
+    data.setRobotPosition(new Position(data.getRobotPosition().x,data.getRobotPosition().y-1));
     return true;
 	  }
 	  else
 		  return false;
   }
   
-  @Override
-  public void moveLeftMonster(){
-	  if(data.getMonsterPosition().x > data.getMapMinX())
-    data.setMonsterPosition(new Position(data.getMonsterPosition().x-1,data.getMonsterPosition().y));
-  }
   
-  @Override
-  public void moveRightMonster(){
-	  if(data.getMonsterPosition().x < data.getMapMaxX())
-    data.setMonsterPosition(new Position(data.getMonsterPosition().x+1,data.getMonsterPosition().y));
-  }
-  
-  @Override
-  public void moveUpMonster(){
-	  if(data.getMonsterPosition().y > data.getMapMinY())
-    data.setMonsterPosition(new Position(data.getMonsterPosition().x,data.getMonsterPosition().y-1));
-  }
-  
-  @Override
-  public void moveDownMonster(){
-	  if(data.getMonsterPosition().y < data.getMapMaxY())
-    data.setMonsterPosition(new Position(data.getMonsterPosition().x,data.getMonsterPosition().y+1));
-  }
-  
-  @Override
-  public void collisionCerise(){
-	  data.addHealthHero();
-	  data.setCerisePosition(new Position(ThreadLocalRandom.current().nextDouble(data.getMapMinX(), data.getMapMaxX()),ThreadLocalRandom.current().nextDouble(data.getMapMinX(), data.getMapMaxX())));
-	  
-  }
-  
-  @Override
-  public void collisionMonster(){
-	  data.setMonsterPosition(new Position(ThreadLocalRandom.current().nextDouble(data.getMapMinX(), data.getMapMaxX()),ThreadLocalRandom.current().nextDouble(data.getMapMinX(), data.getMapMaxX())));
-  }
 }

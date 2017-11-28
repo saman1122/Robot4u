@@ -47,22 +47,22 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
   @Override
   public void stepActionEmptyRoom(){
 	  
-	  if(simulator.moveLeftCheck() == 0)
+	  if(simulator.moveLeftCheck() == 1)
       	simulator.moveL();
       else
       {
     	  System.out.println("moveL impossible");
-      	if(simulator.moveUpCheck() == 0)
+      	if(simulator.moveUpCheck() == 1)
       		simulator.moveU();
       	else
       	{
       		System.out.println("moveU impossible");
-      		if(simulator.moveRightCheck() == 0)
+      		if(simulator.moveRightCheck() == 1)
       			simulator.moveR();
       		else
       		{
       			System.out.println("moveR impossible");
-      			if(simulator.moveDownCheck() == 0)
+      			if(simulator.moveDownCheck() == 1)
       				simulator.moveD();
   				else
           		{
@@ -71,6 +71,63 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
           		}
       		}
       	}
+      }
+	  
+  }
+  
+  @Override
+  public void stepActionEmptyRoomV2(){
+	  
+	  if(simulator.moveLeftCheck() == 1)
+      	simulator.moveL();
+      else
+      {
+    	  System.out.println("moveL impossible");
+      	if(simulator.moveUpCheck() == 1)
+      		simulator.moveU();
+      	else
+      	{
+      		System.out.println("moveU impossible");
+      		if(simulator.moveRightCheck() == 1)
+      			simulator.moveR();
+      		else
+      		{
+      			System.out.println("moveR impossible");
+      			if(simulator.moveDownCheck() == 1)
+      				simulator.moveD();
+  				else
+          		{
+  					System.out.println("moveD impossible");
+      			System.out.println("NO NEW MOVE AVAILABLE");
+      			
+      			if(simulator.moveLeftCheck() == 2)
+      		      	simulator.moveL();
+      		      else
+      		      {
+      		    	  System.out.println("moveL impossible");
+      		      	if(simulator.moveUpCheck() == 2)
+      		      		simulator.moveU();
+      		      	else
+      		      	{
+      		      		System.out.println("moveU impossible");
+      		      		if(simulator.moveRightCheck() == 2)
+      		      			simulator.moveR();
+      		      		else
+      		      		{
+      		      			System.out.println("moveR impossible");
+      		      			if(simulator.moveDownCheck() == 2)
+      		      				simulator.moveD();
+      		  				else
+      		          		{
+      		  					System.out.println("moveD impossible");
+      		      			System.out.println("NO MOVE AVAILABLE");
+      		          		}
+      		      		}
+      		      	}
+          		}
+      		}
+      	}
+      }
       }
 	  
   }
@@ -100,21 +157,5 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
     }
   }
   
-  @Override
-  public void stepActionMonster(){
-    switch (gen.nextInt(4)){
-      case 0:
-        simulator.moveLeftMonster();
-        break;
-      case 1:
-        simulator.moveRightMonster();
-        break;
-      case 2:
-        simulator.moveUpMonster();
-        break;
-      default:
-        simulator.moveDownMonster();
-        break;
-    }
-  }
+  
 }

@@ -8,19 +8,17 @@ package specifications;
 
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import data.Position;
 
 public interface ReadService {
-  public Position getHeroesPosition();
+  public Position getRobotPosition();
   public int getStepNumber();
 double getMapMinX();
 double getMapMaxX();
 double getMapMinY();
 double getMapMaxY();
-Position getCerisePosition();
-int getHealthHero();
-Position getMonsterPosition();
 ArrayList<Position> getCheckedPositions();
-TreeMap<Integer,Position> getKnownPositions();
+ConcurrentHashMap<Position,Integer> getKnownPositions();
 }

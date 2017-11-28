@@ -7,8 +7,12 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 import specifications.DataService;
@@ -16,15 +20,12 @@ import tools.HardCodedParameters;
 
 public class Data implements DataService{
   //private Heroes hercules;
-  Position heroesPosition;
-  Position cerisePosition;
-  Position monsterPosition;
-  TreeMap<Integer,Position> knownPositions;
+  Position robotPosition;
+  ConcurrentHashMap<Position,Integer> knownPositions;
   ArrayList<Position> checkedPositions;
   
   
   int stepNumber;
-  int healthHero;
   
   double mapMinX;
   double mapMaxX;
@@ -44,15 +45,15 @@ public class Data implements DataService{
     //heroesPosition = new Position((int) (Math.random() * mapMaxX-mapMinX )+mapMinX,(int) (Math.random() * mapMaxY-mapMinY )+mapMinY); 
     //cerisePosition = new Position((int) (Math.random() * mapMaxX-mapMinX )+mapMinX,(int) (Math.random() * mapMaxY-mapMinY )+mapMinY);
     //monsterPosition = new Position((int) (Math.random() * mapMaxX-mapMinX )+mapMinX,(int) (Math.random() * mapMaxY-mapMinY )+mapMinY);
-    knownPositions = new TreeMap<Integer,Position>();
+    knownPositions = new ConcurrentHashMap<Position,Integer>();
     checkedPositions = new ArrayList<Position>();
-    heroesPosition = new Position(2,3); 
-    cerisePosition = new Position(ThreadLocalRandom.current().nextDouble(mapMinX, mapMaxX),ThreadLocalRandom.current().nextDouble(mapMinY, mapMaxY));
-    monsterPosition = new Position(ThreadLocalRandom.current().nextDouble(mapMinX, mapMaxX),ThreadLocalRandom.current().nextDouble(mapMinY, mapMaxY));
+    robotPosition = new Position(4,2); 
+    
     
     //ThreadLocalRandom.current().nextInt(0, 700);
     
-    healthHero = 3;
+    
+    
     
     
   }
@@ -77,57 +78,65 @@ public double getMapMaxY() {
 	return mapMaxY;
 }
 
-@Override
-public int getHealthHero() {
-	return healthHero;
-}
 
 @Override
-public void setHealthHero(int healthHero) {
-	this.healthHero = healthHero;
-}
-
-@Override
-public void addHealthHero() { healthHero = healthHero+1; }
-
-@Override
-public Position getCerisePosition() {
-	return cerisePosition;
-}
-@Override
-public void setCerisePosition(Position cerisePosition) {
-	this.cerisePosition = cerisePosition;
-}
-
-@Override
-public Position getMonsterPosition() {
-	return monsterPosition;
-}
-@Override
-public void setMonsterPosition(Position monsterPosition) {
-	this.monsterPosition = monsterPosition;
-}
-
-@Override
-public TreeMap<Integer, Position> getKnownPositions() {
+public ConcurrentHashMap<Position,Integer> getKnownPositions() {
 	return knownPositions;
 }
 
 @Override //si meme position overwrite pour garder dernier state
-public void addKnownPositions(double x1,double y1,int state1,double x2,double y2,int state2,double x3,double y3,int state3,double x4,double y4,int state4,double x5,double y5,int state5) { //ajouter condition anti doublons
+public void addKnownPositions(double x,double y,int state) {
 	
+	/*
+	Position position = new Position(x, y);
+	Set<Position> keys = getKnownPositions().keySet();
+
+    for(Position key: keys){
+        System.out.println("coord : "+key.x+","+key.y+" état : "+ getKnownPositions().get(key));
+        if(position.equals(getKnownPositions().get(key)))
+        {
+        	knownPositions.remove(new Position(x,y));
+        }
+    }*/
+	//knownPositions.remove(new Position(x,y));
+    knownPositions.put(new Position(x,y) , state);
+	/*
+	Set<Entry<Position,Integer>> set = getKnownPositions().entrySet();
+    Iterator<Map.Entry<Position, Integer>> it = set.iterator();
+    
+    //int a=0;
+    
+    //ArrayList<Position> listASuppr = new ArrayList<Position>();
+    while(it.hasNext()){
+       Map.Entry<Position, Integer> entry = it.next();
+       if(position.equals(entry.getKey()))
+       {
+    	   //listASuppr.add(entry.getKey());
+    	   //System.out.print(entry.getKey());
+    	   knownPositions.remove(new Position(x,y));
+       //a=1;
+       }
+    }
+    */
+
+	/*
+    if(a==0)
+    {
+    */
 		
-			knownPositions.put(new Integer(state1), new Position(x1,y1));
-		
-			knownPositions.put(new Integer(state2),new Position(x2,y2));
-		
-			knownPositions.put(new Integer(state3),new Position(x3,y3));
-		
-			knownPositions.put(new Integer(state4),new Position(x4,y4));
-		
-			knownPositions.put(new Integer(state5),new Position(x5,y5));
+	//}
+	
+		/*
+	Set<Position> keys = getKnownPositions().keySet();
+
+    for(Position key: keys){
+        System.out.println("coord : "+key.x+","+key.y+" état : "+ getKnownPositions().get(key));
+    }
+    */
+			
 
 }
+
 
 @Override
 public ArrayList<Position> getCheckedPositions() {//Extraction depuis knownPosition
@@ -147,13 +156,13 @@ public void addCheckedPositions(double x,double y) {//garde doublon pour mesurer
 }
 
   @Override
-  public Position getHeroesPosition(){ return heroesPosition; }
+  public Position getRobotPosition(){ return robotPosition; }
 
   @Override
   public int getStepNumber(){ return stepNumber; }
 
   @Override
-  public void setHeroesPosition(Position p) { heroesPosition = p; }
+  public void setRobotPosition(Position p) { robotPosition = p; }
   
   @Override
   public void setStepNumber(int n){ stepNumber=n; }

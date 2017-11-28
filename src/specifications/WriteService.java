@@ -9,13 +9,8 @@ package specifications;
 import data.Position;
 
 public interface WriteService {
-  public void setHeroesPosition(Position p);
+  public void setRobotPosition(Position p);
   public void setStepNumber(int n);
-void setCerisePosition(Position cerisePosition);
-void setHealthHero(int healthHero);
-void addHealthHero();
-void setMonsterPosition(Position monsterPosition);
 void addCheckedPositions(double x, double y);
-void addKnownPositions(double x1, double y1, int state1, double x2, double y2, int state2, double x3, double y3,
-		int state3, double x4, double y4, int state4, double x5, double y5, int state15);
+void addKnownPositions(double x, double y, int state);
 }

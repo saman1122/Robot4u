@@ -62,7 +62,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 	    
 	    
 	  Group panel = new Group();
-	  Rectangle heroesAvatar = new Rectangle(data.getHeroesPosition().x*HardCodedParameters.zoom,data.getHeroesPosition().y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
+	  Rectangle heroesAvatar = new Rectangle(data.getRobotPosition().x*HardCodedParameters.zoom,data.getRobotPosition().y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
     heroesAvatar.setFill(Color.rgb(10,10,10));
     heroesAvatar.setEffect(new Lighting());
     //heroesAvatar.setTranslateX(data.getHeroesPosition().x);
@@ -101,6 +101,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
     panel.getChildren().add(checked);
     }
 
+    /*
     //Objet immobile : cerise
     Circle ceriseAvatar = new Circle(2,  Color.rgb(255,100,10));
     ceriseAvatar.setEffect(new Lighting());
@@ -112,7 +113,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
     monsterAvatar.setEffect(new Lighting());
     monsterAvatar.setTranslateX(data.getMonsterPosition().x);
     monsterAvatar.setTranslateY(data.getMonsterPosition().y);
-    
+    */
 
     
     panel.getChildren().add(heroesAvatar);

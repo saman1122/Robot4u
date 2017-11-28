@@ -11,12 +11,6 @@ public interface SimulatorService{
   public boolean moveRight();
   public boolean moveUp();
   public boolean moveDown();
-void collisionCerise();
-void moveLeftMonster();
-void moveRightMonster();
-void moveUpMonster();
-void moveDownMonster();
-void collisionMonster();
 int moveLeftCheck();
 int moveRightCheck();
 int moveUpCheck();

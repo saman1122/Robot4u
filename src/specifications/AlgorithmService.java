@@ -9,9 +9,9 @@ package specifications;
 public interface AlgorithmService{
   public void activation();
   public void stepAction();
-  public void stepActionMonster();
 void stepActionLeft();
 void stepActionRight();
 void stepActionEmptyRoom();
+void stepActionEmptyRoomV2();
 void stepActionTest();
 }
