@@ -9,6 +9,7 @@ package specifications;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import data.Obstacle;
 import data.Position;
 
 public interface ReadService {
@@ -18,6 +19,9 @@ double getMapMinX();
 double getMapMaxX();
 double getMapMinY();
 double getMapMaxY();
+double getMiniMapMinX();
+double getMiniMapMinY();
 ArrayList<Position> getCheckedPositions();
 ConcurrentHashMap<Position,Integer> getKnownPositions();
+ArrayList<Obstacle> getObstaclePositions();
 }
