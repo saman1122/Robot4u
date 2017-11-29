@@ -4,11 +4,11 @@
  * GPL version>=3 <http://www.gnu.org/licenses/>.
  * $Id: data/Position.java 2015-03-09 buixuan.
  * ******************************************************/
-package data;
+package tools;
 
 public class Position implements Comparable<Position>{
 	public double x,y;
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

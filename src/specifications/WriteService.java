@@ -6,11 +6,13 @@
  * ******************************************************/
 package specifications;
 
-import data.Position;
+import tools.Direction;
+import tools.Position;
 
 public interface WriteService {
   public void setRobotPosition(Position p);
   public void setStepNumber(int n);
 void addCheckedPositions(double x, double y);
 void addKnownPositions(double x, double y, int state);
+void setRobotDirection(Direction direction);
 }

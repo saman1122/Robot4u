@@ -6,17 +6,15 @@
  * ******************************************************/
 package specifications;
 
+import tools.Direction;
+
 public interface SimulatorService{
-  public boolean moveLeft();
-  public boolean moveRight();
-  public boolean moveUp();
-  public boolean moveDown();
-int moveLeftCheck();
-int moveRightCheck();
-int moveUpCheck();
-int moveDownCheck();
-void moveL();
-void moveR();
-void moveU();
-void moveD();
+int moveLeftCheck(Direction direction);
+int moveRightCheck(Direction direction);
+int moveUpCheck(Direction direction);
+int moveDownCheck(Direction direction);
+void moveL(Direction direction);
+void moveR(Direction direction);
+void moveU(Direction direction);
+void moveD(Direction direction);
 }

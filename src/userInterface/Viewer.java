@@ -7,14 +7,12 @@
 package userInterface;
 
 import tools.HardCodedParameters;
-
+import tools.Position;
 import specifications.ViewerService;
 import specifications.ReadService;
 import specifications.RequireReadService;
 import specifications.StartEngineService;
 import specifications.RequireStartEngineService;
-
-import data.Position;
 import javafx.scene.Group;
 import javafx.scene.effect.Lighting;
 import javafx.scene.paint.Color;

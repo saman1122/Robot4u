@@ -9,10 +9,13 @@ package data;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import specifications.DataService;
+import tools.Direction;
+import tools.Position;
 
 public class Data implements DataService{
   //private Heroes hercules;
   Position robotPosition;
+  Direction robotDirection;
   ConcurrentHashMap<Position,Integer> knownPositions;
   ArrayList<Position> checkedPositions;
   
@@ -39,14 +42,10 @@ public class Data implements DataService{
     //monsterPosition = new Position((int) (Math.random() * mapMaxX-mapMinX )+mapMinX,(int) (Math.random() * mapMaxY-mapMinY )+mapMinY);
     knownPositions = new ConcurrentHashMap<Position,Integer>();
     checkedPositions = new ArrayList<Position>();
-    robotPosition = new Position(4,2); 
+    robotPosition = new Position(2,2); 
     
     
     //ThreadLocalRandom.current().nextInt(0, 700);
-    
-    
-    
-    
     
   }
 
@@ -158,4 +157,10 @@ public void addCheckedPositions(double x,double y) {//garde doublon pour mesurer
   
   @Override
   public void setStepNumber(int n){ stepNumber=n; }
+  
+  @Override
+  public Direction getRobotDirection() { return robotDirection; }
+  
+  @Override
+  public void setRobotDirection(Direction direction) {this.robotDirection = direction;}
 }

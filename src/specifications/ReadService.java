@@ -9,7 +9,8 @@ package specifications;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import data.Position;
+import tools.Direction;
+import tools.Position;
 
 public interface ReadService {
   public Position getRobotPosition();
@@ -20,4 +21,5 @@ double getMapMinY();
 double getMapMaxY();
 ArrayList<Position> getCheckedPositions();
 ConcurrentHashMap<Position,Integer> getKnownPositions();
+Direction getRobotDirection();
 }
