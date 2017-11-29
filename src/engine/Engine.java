@@ -65,7 +65,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		data.addKnownPositions(data.getRobotPosition().x,data.getRobotPosition().y+1,moveDownCheck());//down
     	
     	
-        algorithm.stepActionEmptyRoomV2();
+        algorithm.stepActionEmptyRoom();
         
         data.setStepNumber(data.getStepNumber()+1);
         

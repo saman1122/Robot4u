@@ -56,11 +56,11 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
   public Group getPanel(){
     
 	  
-	  
+	  final int zoom=HardCodedParameters.zoom;
 	    
 	    
 	  Group panel = new Group();
-	  Rectangle heroesAvatar = new Rectangle(data.getRobotPosition().x*HardCodedParameters.zoom,data.getRobotPosition().y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
+	  Rectangle heroesAvatar = new Rectangle(data.getRobotPosition().x*zoom,data.getRobotPosition().y*zoom,zoom,zoom);
     heroesAvatar.setFill(Color.rgb(10,10,10));
     heroesAvatar.setEffect(new Lighting());
     //heroesAvatar.setTranslateX(data.getHeroesPosition().x);
@@ -68,12 +68,12 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
     
     //Limite map
     //Image image = new Image("fond.jpg");
-    Rectangle limitMap = new Rectangle(data.getMapMinX()*HardCodedParameters.zoom,data.getMapMinY()*HardCodedParameters.zoom,(data.getMapMaxX()+1)*HardCodedParameters.zoom,(data.getMapMaxY()+1)*HardCodedParameters.zoom);
+    Rectangle limitMap = new Rectangle(data.getMapMinX()*zoom,data.getMapMinY()*zoom,(data.getMapMaxX()+1)*zoom,(data.getMapMaxY()+1)*zoom);
     limitMap.setFill(Color.rgb(156,216,255,0.2));
     
     //Grille
     double epaisseurLine = 0.5;
-    int tailleCase = HardCodedParameters.zoom;
+    int tailleCase = zoom;
     
     for(int i=0; i<=data.getMapMaxX()+1; i++)
     {
@@ -94,21 +94,23 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
     //Marquer passage checké
     for(Position p:data.getCheckedPositions())
     {
-    Rectangle checked  = new Rectangle(p.x*HardCodedParameters.zoom,p.y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
+    Rectangle checked  = new Rectangle(p.x*zoom,p.y*zoom,zoom,zoom);
     checked.setFill(Color.rgb(50,200,50,0.2));
     panel.getChildren().add(checked);
     }
     
+    /*
     //Génération d'obstacles
     for(Obstacle o:data.getObstaclePositions())
     {
-    Rectangle checked  = new Rectangle(o.p.x*HardCodedParameters.zoom,o.p.y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
+    Rectangle checked  = new Rectangle(o.p.x*zoom,o.p.y*zoom,zoom,zoom);
     checked.setFill(Color.rgb(255,0,0,1));
     panel.getChildren().add(checked);
     }
+    */
 
     //Génération miniMap
-    //Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*HardCodedParameters.zoom+HardCodedParameters.zoom,data.getMiniMapMinY()*HardCodedParameters.zoom);
+    //Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*zoom+zoom,data.getMiniMapMinY()*zoom);
     
     /*
     Set<Entry<Position,Integer>> set = data.getKnownPositions().entrySet();
@@ -116,7 +118,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 
     while(it.hasNext()){
        Map.Entry<Position, Integer> entry = it.next();
-       Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*HardCodedParameters.zoom+HardCodedParameters.zoom+entry.getKey().x*HardCodedParameters.zoom,data.getMiniMapMinY()*HardCodedParameters.zoom+entry.getKey().y*HardCodedParameters.zoom,50,50);
+       Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*zoom+zoom+entry.getKey().x*zoom,data.getMiniMapMinY()*zoom+entry.getKey().y*zoom,50,50);
        System.out.println("coordonnees : "+entry.getKey().x+","+entry.getKey().y+"  etat : "+entry.getValue());
        miniMap.setFill(Color.rgb(10,10,10,0.5));
        panel.getChildren().add(miniMap);
@@ -126,7 +128,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
     
     Set<Position> keys = data.getKnownPositions().keySet();
 	for(Position key: keys){
-		   Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*HardCodedParameters.zoom+HardCodedParameters.zoom+key.x*HardCodedParameters.zoom/2,data.getMiniMapMinY()*HardCodedParameters.zoom+key.y*HardCodedParameters.zoom/2,HardCodedParameters.zoom/2,HardCodedParameters.zoom/2);
+		   Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*zoom+zoom+key.x*zoom/2,data.getMiniMapMinY()*zoom+zoom+key.y*zoom/2,zoom/2,zoom/2);
 	       System.out.println("coordonnees : "+key.x+","+key.y+" state : "+data.getKnownPositions().get(key));
 	       
 	       if(data.getKnownPositions().get(key) == 0)//obstacle

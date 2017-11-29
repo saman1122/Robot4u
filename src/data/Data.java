@@ -48,7 +48,7 @@ public class Data implements DataService{
     //monsterPosition = new Position((int) (Math.random() * mapMaxX-mapMinX )+mapMinX,(int) (Math.random() * mapMaxY-mapMinY )+mapMinY);
     knownPositions = new ConcurrentHashMap<Position,Integer>();
     checkedPositions = new ArrayList<Position>();
-    robotPosition = new Position(4,2); 
+    robotPosition = new Position(4,0); 
     
     obstaclePositions = new ArrayList<Obstacle>();
     obstaclePositions.add(new Obstacle(new Position(1,3)));
