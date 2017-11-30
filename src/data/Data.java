@@ -13,11 +13,12 @@ import tools.Direction;
 import tools.Position;
 
 public class Data implements DataService{
-  //private Heroes hercules;
+  
   Position robotPosition;
   Direction robotDirection;
   ConcurrentHashMap<Position,Integer> knownPositions;
   ArrayList<Position> checkedPositions;
+  ArrayList<Obstacle> obstaclePositions;
   
   
   int stepNumber;
@@ -26,6 +27,11 @@ public class Data implements DataService{
   double mapMaxX;
   double mapMinY;
   double mapMaxY;
+  
+  double miniMapMinX;
+  double miniMapMaxX;
+  double miniMapMinY;
+  double miniMapMaxY;
 
   public Data(){
 	  
@@ -33,6 +39,9 @@ public class Data implements DataService{
 	mapMaxX = 4;
 	mapMinY = 0;
 	mapMaxY = 3;
+	
+	miniMapMinX = mapMaxX+1;
+	miniMapMinY = mapMinY;
 	
 	stepNumber = 0;
 	
@@ -42,7 +51,12 @@ public class Data implements DataService{
     //monsterPosition = new Position((int) (Math.random() * mapMaxX-mapMinX )+mapMinX,(int) (Math.random() * mapMaxY-mapMinY )+mapMinY);
     knownPositions = new ConcurrentHashMap<Position,Integer>();
     checkedPositions = new ArrayList<Position>();
-    robotPosition = new Position(2,2); 
+    robotPosition = new Position(4,3); 
+    
+    obstaclePositions = new ArrayList<Obstacle>();
+    obstaclePositions.add(new Obstacle(new Position(1,3)));
+    obstaclePositions.add(new Obstacle(new Position(2,3)));
+    obstaclePositions.add(new Obstacle(new Position(3,3)));
     
     
     //ThreadLocalRandom.current().nextInt(0, 700);
@@ -69,6 +83,15 @@ public double getMapMaxY() {
 	return mapMaxY;
 }
 
+@Override
+public double getMiniMapMinX() {
+	return miniMapMinX;
+}
+
+@Override
+public double getMiniMapMinY() {
+	return miniMapMinY;
+}
 
 @Override
 public ConcurrentHashMap<Position,Integer> getKnownPositions() {
@@ -139,6 +162,23 @@ public ArrayList<Position> getCheckedPositions() {//Extraction depuis knownPosit
     }
 	*/
 	return checkedPositions;
+}
+
+@Override
+public ArrayList<Obstacle> getObstaclePositions() {//Extraction depuis knownPosition
+	/* 
+	Set<Integer> keys = getKnownPositions().keySet();
+	for(int key: keys){
+        if(key==1)
+        	checkedPositions.add(getKnownPositions().get(key));       	
+    }
+	*/
+	return obstaclePositions;
+}
+
+@Override
+public void addObstaclePositions(double x,double y) {
+	obstaclePositions.add(new Obstacle(new Position(x,y)));
 }
 
 @Override

@@ -21,6 +21,8 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import data.Obstacle;
+
 public class Engine implements EngineService, RequireDataService, RequireAlgorithmService{
 	private Timer engineClock;
 	private DataService data;
@@ -66,7 +68,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 					data.addKnownPositions(data.getRobotPosition().x,data.getRobotPosition().y+1,moveDownCheck(Direction.NORD));//down
 
 
-					algorithm.stepActionEmptyRoom();
+					algorithm.stepAction();
 
 					data.setStepNumber(data.getStepNumber()+1);
 
@@ -180,7 +182,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 			position = new Position(data.getRobotPosition().x, data.getRobotPosition().y + 1);
 			resultatIf = (data.getRobotPosition().y + 1 <= data.getMapMaxY());
 		}
-		
+
 		if(resultatIf)
 		{
 			r=1;
@@ -188,9 +190,15 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 				if(p.x==position.x && p.y==position.y)
 					r=2;
 			}
-		}
-		else
+		} else {
 			r= 0;
+		}
+
+		for(Obstacle o : data.getObstaclePositions())
+		{
+			if(o.p.x == position.x && o.p.y == position.y)
+				r = 0;
+		}
 		return r;
 	}
 
@@ -218,7 +226,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 			position = new Position(data.getRobotPosition().x, data.getRobotPosition().y + 1);
 			resultatIf = (data.getRobotPosition().y + 1 <= data.getMapMaxY());
 		}
-		
+
 		if(resultatIf)
 		{
 			r=1;
@@ -226,9 +234,15 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 				if(p.x==position.x && p.y==position.y)
 					r=2;
 			}
-		}
-		else
+		} else {
 			r= 0;
+		}
+
+		for(Obstacle o : data.getObstaclePositions())
+		{
+			if(o.p.x == position.x && o.p.y == position.y)
+				r = 0;
+		}
 		return r;
 	}
 
@@ -256,7 +270,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 			position = new Position(data.getRobotPosition().x, data.getRobotPosition().y + 1);
 			resultatIf = (data.getRobotPosition().y + 1 <= data.getMapMaxY());
 		}
-		
+
 		if(resultatIf)
 		{
 			r=1;
@@ -264,9 +278,15 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 				if(p.x==position.x && p.y==position.y)
 					r=2;
 			}
-		}
-		else
+		} else {
 			r= 0;
+		}
+
+		for(Obstacle o : data.getObstaclePositions())
+		{
+			if(o.p.x == position.x && o.p.y == position.y)
+				r = 0;
+		}
 		return r;
 	}
 
@@ -294,7 +314,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 			position = new Position(data.getRobotPosition().x, data.getRobotPosition().y + 1);
 			resultatIf = (data.getRobotPosition().y + 1 <= data.getMapMaxY());
 		}
-		
+
 		if(resultatIf)
 		{
 			r=1;
@@ -302,9 +322,15 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 				if(p.x==position.x && p.y==position.y)
 					r=2;
 			}
-		}
-		else
+		} else {
 			r= 0;
+		}
+
+		for(Obstacle o : data.getObstaclePositions())
+		{
+			if(o.p.x == position.x && o.p.y == position.y)
+				r = 0;
+		}
 		return r;
 	}
 

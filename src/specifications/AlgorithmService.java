@@ -7,9 +7,6 @@
 package specifications;
 
 public interface AlgorithmService{
-  public void activation();
-  public void stepAction();
-void stepActionEmptyRoom();
-void stepActionEmptyRoomV2();
-void stepActionTest();
+	public void activation();
+	public void stepAction();
 }

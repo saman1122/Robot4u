@@ -9,17 +9,40 @@ package algorithm;
 import specifications.AlgorithmService;
 import specifications.SimulatorService;
 import tools.Direction;
+import tools.Position;
 import specifications.RequireSimulatorService;
+
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+
+import data.Obstacle;
+import javafx.geometry.Pos;
 
 public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	private SimulatorService simulator;
 	private Random gen;
+
+	private int mapping[][];
+	private ArrayList<Position> listPositionAlle;
+	private ArrayList<Obstacle> listObstacle;
+	
 	private Direction direction;
+	private Position currentPosition;
+	public final static String UP = "U", DOWN = "D", RIGHT = "R", LEFT = "L";
+
+	private boolean mappingFinish;
 
 	public RobotIA() {
 		gen = new Random();
 		direction = Direction.NORD;
+		currentPosition = new Position(0, 0);
+
+		listObstacle = new ArrayList<Obstacle>();
+		listPositionAlle = new ArrayList<Position>();
+		listPositionAlle.add(currentPosition);
+
+		mappingFinish = false;
 	}
 
 	@Override
@@ -29,156 +52,61 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 
 	@Override
 	public void activation(){
+		if (moveLeft()) while (moveUp());
+
 		//simulator.moveRight();
 	}
 
+	public boolean mapping() {
+		boolean retour = false;
+		if (!mappingFinish) {
+			boolean stepRealised = false;
 
-	@Override
-	public void stepActionEmptyRoom(){
+			while(!stepRealised) {
 
-		if(simulator.moveLeftCheck(direction) == 1) {
-			simulator.moveL(direction);
-			changeDirection("L");
-		}else
-		{
-			System.out.println("moveL impossible");
-			if(simulator.moveUpCheck(direction) == 1) {
-				simulator.moveU(direction);
-				changeDirection("U");
-			}else
-			{
-				System.out.println("moveU impossible");
-				if(simulator.moveRightCheck(direction) == 1) {
-					simulator.moveR(direction);
-					changeDirection("R");
+				if(moveLeft()) {
+					stepRealised = true;
 				}else
 				{
-					System.out.println("moveR impossible");
-					if(simulator.moveDownCheck(direction) == 1) {
-						simulator.moveD(direction);
-						changeDirection("D");
+					System.out.println("moveL impossible");
+					if(moveUp()) {
+						stepRealised = true;
 					}else
 					{
-						System.out.println("moveD impossible");
-						System.out.println("NO MOVE AVAILABLE");
-						
-						if(simulator.moveLeftCheck(direction) >= 1) {
-							simulator.moveL(direction);
-							changeDirection("L");
-						}else {
-							System.out.println("moveL impossible");
-							if(simulator.moveUpCheck(direction) >= 1) {
-								simulator.moveU(direction);
-								changeDirection("U");
-							} else {
-								System.out.println("moveU impossible");
-								if(simulator.moveRightCheck(direction) >= 1) { 
-									simulator.moveR(direction);
-									changeDirection("U");
-								} else {
-									System.out.println("moveR impossible");
-									if(simulator.moveDownCheck(direction) >= 1) {
-										simulator.moveD(direction);
-										changeDirection("R");
-									}
-									else
-									{
-										System.out.println("moveD impossible");
-										System.out.println("NO MOVE AVAILABLE");
-									}
-								}
+						System.out.println("moveU impossible");
+						if(moveRight()) {
+							stepRealised = true;
+						}else
+						{
+							System.out.println("moveR impossible");
+							if(moveDown()) {
+								stepRealised = true;
+							}else
+							{
+								System.out.println("moveD impossible");
+								System.out.println("NO MOVE AVAILABLE");
 							}
 						}
 					}
 				}
 			}
+
+			System.out.println("Current position" + currentPosition);
 		}
 
-	}
-
-	@Override
-	public void stepActionEmptyRoomV2(){
-		//
-		//		if(simulator.moveLeftCheck() > 0)
-		//			simulator.moveL();
-		//		else
-		//		{
-		//			System.out.println("moveL impossible");
-		//			if(simulator.moveUpCheck() > 0)
-		//				simulator.moveU();
-		//			else
-		//			{
-		//				System.out.println("moveU impossible");
-		//				if(simulator.moveRightCheck() > 0)
-		//					simulator.moveR();
-		//				else
-		//				{
-		//					System.out.println("moveR impossible");
-		//					if(simulator.moveDownCheck() > 0)
-		//						simulator.moveD();
-		//					else
-		//					{
-		//						System.out.println("moveD impossible");
-		//						System.out.println("NO NEW MOVE AVAILABLE");
-		//
-		//						if(simulator.moveLeftCheck() >= 1)
-		//							simulator.moveL();
-		//						else
-		//						{
-		//							System.out.println("moveL impossible");
-		//							if(simulator.moveUpCheck() >= 1)
-		//								simulator.moveU();
-		//							else
-		//							{
-		//								System.out.println("moveU impossible");
-		//								if(simulator.moveRightCheck() >= 1)
-		//									simulator.moveR();
-		//								else
-		//								{
-		//									System.out.println("moveR impossible");
-		//									if(simulator.moveDownCheck() >= 1)
-		//										simulator.moveD();
-		//									else
-		//									{
-		//										System.out.println("moveD impossible");
-		//										System.out.println("NO MOVE AVAILABLE");
-		//									}
-		//								}
-		//							}
-		//						}
-		//					}
-		//				}
-		//			}
-		//		}
-		//
-	}
-
-	@Override
-	public void stepActionTest(){
-
+		return retour;
 	}
 
 	@Override
 	public void stepAction(){
-		//		switch (gen.nextInt(4)){
-		//		case 0:
-		//			simulator.moveLeft();
-		//			break;
-		//		case 1:
-		//			simulator.moveRight();
-		//			break;
-		//		case 2:
-		//			simulator.moveUp();
-		//			break;
-		//		default:
-		//			simulator.moveDown();
-		//			break;
-		//		}
+		if (mapping()) {
+
+		}
 	}
 
 	public void changeDirection(String newMove) {
 		switch (newMove) {
-		case "L":
+		case LEFT:
 			if (direction == Direction.NORD) {
 				direction = Direction.OUEST;
 			}else if (direction == Direction.EST) {
@@ -189,7 +117,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 				direction = Direction.SUD;
 			}
 			break;
-		case "R":
+		case RIGHT:
 			if (direction == Direction.NORD) {
 				direction = Direction.EST;
 			}else if (direction == Direction.EST) {
@@ -200,7 +128,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 				direction = Direction.NORD;
 			}
 			break;
-		case "U":
+		case UP:
 			if (direction == Direction.NORD) {
 				direction = Direction.NORD;
 			}else if (direction == Direction.EST) {
@@ -211,7 +139,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 				direction = Direction.OUEST;
 			}
 			break;
-		case "D":
+		case DOWN:
 			if (direction == Direction.NORD) {
 				direction = Direction.SUD;
 			}else if (direction == Direction.EST) {
@@ -223,6 +151,136 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 			}
 			break;
 		}
+	}
+
+	private void updateCurrentPosition(String move) {
+		
+		currentPosition = getPositionAt(move);
+
+		listPositionAlle.add(currentPosition);
+
+	}
+
+	public boolean moveLeft() {
+		boolean retour = false;
+		int checkMove = simulator.moveLeftCheck(direction);
+		
+		if (checkMove == 0) listObstacle.add(new Obstacle(new Position(0, 0)));
+
+		if(checkMove >= 1) {
+			simulator.moveL(direction);
+			updateCurrentPosition(LEFT);
+			changeDirection(LEFT);
+			retour = true;
+		}
+
+		return retour;
+	}
+
+	public boolean moveRight() {
+		boolean retour = false;
+
+		if(simulator.moveRightCheck(direction) >= 1) {
+			simulator.moveR(direction);
+			updateCurrentPosition(RIGHT);
+			changeDirection(RIGHT);
+			retour = true;
+		}
+
+		return retour;
+	}
+
+	public boolean moveUp() {
+		boolean retour = false;
+
+		if(simulator.moveUpCheck(direction) >= 1) {
+			simulator.moveU(direction);
+			updateCurrentPosition(UP);
+			changeDirection(UP);
+			retour = true;
+		}
+
+		return retour;
+	}
+	public boolean moveDown() {
+		boolean retour = false;
+
+		if(simulator.moveDownCheck(direction) >= 1) {
+			simulator.moveD(direction);
+			updateCurrentPosition(DOWN);
+			changeDirection(DOWN);
+			retour = true;
+		}
+
+		return retour;
+	}
+	
+	private Position getPositionAt(String position) {
+		double x = currentPosition.x, y = currentPosition.y;
+		
+		if (direction == Direction.NORD) {
+			switch (position) {
+			case LEFT:
+				x -= 1;
+				break;
+			case RIGHT:
+				x += 1;
+				break;
+			case UP:
+				y -= 1;
+				break;
+			case DOWN:
+				y += 1;
+				break;
+			}
+		}else if (direction == Direction.SUD) {
+			switch (position) {
+			case LEFT:
+				x += 1;
+				break;
+			case RIGHT:
+				x -= 1;
+				break;
+			case UP:
+				y += 1;
+				break;
+			case DOWN:
+				y -= 1;
+				break;
+			}
+		}else if (direction == Direction.EST) {
+			switch (position) {
+			case UP:
+				x += 1;
+				break;
+			case DOWN:
+				x -= 1;
+				break;
+			case LEFT:
+				y -= 1;
+				break;
+			case RIGHT:
+				y += 1;
+				break;
+			}
+		}else if (direction == Direction.OUEST) {
+			switch (position) {
+			case UP:
+				x -= 1;
+				break;
+			case DOWN:
+				x += 1;
+				break;
+			case LEFT:
+				y += 1;
+				break;
+			case RIGHT:
+				y -= 1;
+				break;
+			}
+		}
+		
+		return new Position(x, y);
 	}
 
 

@@ -9,9 +9,13 @@ package specifications;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import data.Obstacle;
+<<<<<<< HEAD
 import tools.Direction;
 import tools.Position;
+=======
+import data.Obstacle;
+import data.Position;
+>>>>>>> 1f4f8bd46efcd2ea547e05a18164fafbcf031a89
 
 public interface ReadService {
   public Position getRobotPosition();
@@ -24,6 +28,9 @@ double getMiniMapMinX();
 double getMiniMapMinY();
 ArrayList<Position> getCheckedPositions();
 ConcurrentHashMap<Position,Integer> getKnownPositions();
+<<<<<<< HEAD
 Direction getRobotDirection();
+=======
 ArrayList<Obstacle> getObstaclePositions();
+>>>>>>> 1f4f8bd46efcd2ea547e05a18164fafbcf031a89
 }
