@@ -50,7 +50,9 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	@Override
 	public void activation(){
 		if (moveLeft()) while (moveUp());
+		
 
+		direction = Direction.NORD;
 		//simulator.moveRight();
 	}
 

@@ -44,6 +44,18 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 	@Override
 	public void init(){
 		engineClock = new Timer();
+		
+
+	    data.addObstaclePositions(1,3);
+	    data.addObstaclePositions(2,3);
+	    data.addObstaclePositions(3,3);
+	    
+
+	    data.addObstaclePositions(0,1);
+	    data.addObstaclePositions(2,1);
+	    data.addObstaclePositions(3,1);
+	    //obstaclePositions.add(new Obstacle(new Position(4,1)));
+		
 	}
 
 	@Override

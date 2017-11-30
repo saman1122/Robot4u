@@ -7,7 +7,10 @@
 package data;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
+
 import specifications.DataService;
 import tools.Direction;
 import tools.Position;
@@ -51,12 +54,12 @@ public class Data implements DataService{
     //monsterPosition = new Position((int) (Math.random() * mapMaxX-mapMinX )+mapMinX,(int) (Math.random() * mapMaxY-mapMinY )+mapMinY);
     knownPositions = new ConcurrentHashMap<Position,Integer>();
     checkedPositions = new ArrayList<Position>();
-    robotPosition = new Position(4,0); 
+    robotPosition = new Position(ThreadLocalRandom.current().nextInt((int)mapMinX, (int)mapMaxX + 1),
+    		ThreadLocalRandom.current().nextInt((int)mapMinY, (int)mapMaxY + 1));
+    
+    robotPosition = new Position(2, 2);
     
     obstaclePositions = new ArrayList<Obstacle>();
-    obstaclePositions.add(new Obstacle(new Position(1,3)));
-    obstaclePositions.add(new Obstacle(new Position(2,3)));
-    obstaclePositions.add(new Obstacle(new Position(3,3)));
     
     
     //ThreadLocalRandom.current().nextInt(0, 700);
