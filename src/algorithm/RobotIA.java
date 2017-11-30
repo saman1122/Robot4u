@@ -13,17 +13,15 @@ import tools.Position;
 import specifications.RequireSimulatorService;
 
 import java.util.ArrayList;
-import java.util.Random;
 import data.Obstacle;
 
 public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	private SimulatorService simulator;
-	private Random gen;
 
 	private int mapping[][];
 	private ArrayList<Position> listPositionAlle;
 	private ArrayList<Obstacle> listObstacle;
-	
+
 	private Direction direction;
 	private Position currentPosition;
 	public final static String UP = "U", DOWN = "D", RIGHT = "R", LEFT = "L";
@@ -31,7 +29,6 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	private boolean mappingFinish;
 
 	public RobotIA() {
-		gen = new Random();
 		direction = Direction.NORD;
 		currentPosition = new Position(0, 0);
 
@@ -50,7 +47,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	@Override
 	public void activation(){
 		if (moveLeft()) while (moveUp());
-		
+
 
 		direction = Direction.NORD;
 		//simulator.moveRight();
@@ -153,7 +150,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	}
 
 	private void updateCurrentPosition(String move) {
-		
+
 		currentPosition = getPositionAt(move);
 
 		listPositionAlle.add(currentPosition);
@@ -163,7 +160,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	public boolean moveLeft() {
 		boolean retour = false;
 		int checkMove = simulator.moveLeftCheck(direction);
-		
+
 		if (checkMove == 0) listObstacle.add(new Obstacle(getPositionAt(LEFT)));
 
 		if(checkMove >= 1) {
@@ -179,7 +176,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	public boolean moveRight() {
 		boolean retour = false;
 		int checkMove = simulator.moveRightCheck(direction);
-		
+
 		if (checkMove == 0) listObstacle.add(new Obstacle(getPositionAt(RIGHT)));
 
 		if(checkMove >= 1) {
@@ -195,7 +192,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	public boolean moveUp() {
 		boolean retour = false;
 		int checkMove = simulator.moveUpCheck(direction);
-		
+
 		if (checkMove == 0) listObstacle.add(new Obstacle(getPositionAt(UP)));
 
 		if(checkMove >= 1) {
@@ -210,7 +207,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	public boolean moveDown() {
 		boolean retour = false;
 		int checkMove = simulator.moveDownCheck(direction);
-		
+
 		if (checkMove == 0) listObstacle.add(new Obstacle(getPositionAt(DOWN)));
 
 		if(checkMove >= 1) {
@@ -222,10 +219,10 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 
 		return retour;
 	}
-	
+
 	private Position getPositionAt(String position) {
 		double x = currentPosition.x, y = currentPosition.y;
-		
+
 		if (direction == Direction.NORD) {
 			switch (position) {
 			case LEFT:
@@ -287,7 +284,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 				break;
 			}
 		}
-		
+
 		return new Position(x, y);
 	}
 

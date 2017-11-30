@@ -12,15 +12,9 @@ import specifications.ViewerService;
 import specifications.Engine4ViewerService;
 import specifications.ReadService;
 import specifications.RequireReadService;
-import specifications.StartEngineService;
 import specifications.RequireStartEngineService;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
 import data.Obstacle;
 import javafx.scene.Group;
 import javafx.scene.effect.Lighting;
@@ -57,7 +51,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 	public Group getPanel(){
 
 		final int zoom=HardCodedParameters.zoom;
-		
+
 		Group panel = new Group();
 		Rectangle heroesAvatar = new Rectangle(data.getRobotPosition().x*HardCodedParameters.zoom,data.getRobotPosition().y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
 		heroesAvatar.setFill(Color.rgb(10,10,10));
@@ -117,7 +111,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 			miniMap.setFill(Color.BLACK);
 			panel.getChildren().add(miniMap);
 		}
-		
+
 		for (Position p : positions) {
 			Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*zoom+zoom+p.x*zoom/2,data.getMiniMapMinY()*zoom+zoom+p.y*zoom/2,zoom/2,zoom/2);
 

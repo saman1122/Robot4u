@@ -46,39 +46,39 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 	@Override
 	public void init(){
 		engineClock = new Timer();
-		
+
 
 		//Creation des obstacles
-	    data.addObstaclePositions(1,3);
-	    data.addObstaclePositions(2,3);
-	    data.addObstaclePositions(3,3);
-	    
-	    data.addObstaclePositions(0,1);
-	    data.addObstaclePositions(2,1);
-	    data.addObstaclePositions(3,1);
-	    //obstaclePositions.add(new Obstacle(new Position(4,1)));
-	    
-	    //initialisation position robot
+		data.addObstaclePositions(1,3);
+		data.addObstaclePositions(2,3);
+		data.addObstaclePositions(3,3);
 
-	    boolean onObstacle = true;
-	    Position initialPosRobot = null;
-	    
-	    while (onObstacle) {
-	    	onObstacle = false;
-	    	initialPosRobot = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)data.getMapMaxX() + 1),
+		data.addObstaclePositions(0,1);
+		data.addObstaclePositions(2,1);
+		data.addObstaclePositions(3,1);
+		//obstaclePositions.add(new Obstacle(new Position(4,1)));
+
+		//initialisation position robot
+
+		boolean onObstacle = true;
+		Position initialPosRobot = null;
+
+		while (onObstacle) {
+			onObstacle = false;
+			initialPosRobot = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)data.getMapMaxX() + 1),
 					ThreadLocalRandom.current().nextInt((int)data.getMapMinY(), (int)data.getMapMaxY() + 1));
-	    	
-	    	ArrayList<Obstacle> obstacles = data.getObstaclePositions();
-	    	
-	    	for (Obstacle obs:obstacles) {
-	    		if(obs.p.equals(initialPosRobot)) onObstacle = true;
-	    	}
-	    	
-	    }
-	    
-	    data.setRobotPosition(initialPosRobot);
-	    data.setRobotInitPosition(initialPosRobot);
-		
+
+			ArrayList<Obstacle> obstacles = data.getObstaclePositions();
+
+			for (Obstacle obs:obstacles) {
+				if(obs.p.equals(initialPosRobot)) onObstacle = true;
+			}
+
+		}
+
+		data.setRobotPosition(initialPosRobot);
+		data.setRobotInitPosition(initialPosRobot);
+
 	}
 
 	@Override
@@ -132,7 +132,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 	@Override
 	public void moveL(Direction direction){
 		String nom = direction.getNom();
-		String axe = direction.getAxe();
 		Position position = new Position(data.getRobotPosition().x, data.getRobotPosition().y);
 
 		if (nom.equals(Direction.NORD.getNom())) position.x -= 1;
@@ -146,7 +145,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 	@Override
 	public void moveR(Direction direction){
 		String nom = direction.getNom();
-		String axe = direction.getAxe();
 		Position position = new Position(data.getRobotPosition().x, data.getRobotPosition().y);
 
 		if (nom.equals(Direction.NORD.getNom())) position.x += 1;
@@ -160,7 +158,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 	@Override
 	public void moveU(Direction direction){
 		String nom = direction.getNom();
-		String axe = direction.getAxe();
 		Position position = new Position(data.getRobotPosition().x, data.getRobotPosition().y);
 
 		if (nom.equals(Direction.NORD.getNom())) position.y -= 1;
@@ -168,21 +165,12 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		if (nom.equals(Direction.EST.getNom())) position.x += 1;
 		if (nom.equals(Direction.OUEST.getNom())) position.x -= 1;
 
-		//		if (direction.getSigne() == "-") {
-		//			if (axe == "y") position.y -= 1;
-		//			if (axe == "x") position.x -= 1;
-		//		}else {
-		//			if (axe == "y") position.y += 1;
-		//			if (axe == "x") position.x += 1;
-		//		}
-
 		data.setRobotPosition(position);
 	}
 
 	@Override
 	public void moveD(Direction direction){
 		String nom = direction.getNom();
-		String axe = direction.getAxe();
 		Position position = new Position(data.getRobotPosition().x, data.getRobotPosition().y);
 
 		if (nom.equals(Direction.NORD.getNom())) position.y += 1;
@@ -198,7 +186,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		int r;
 		boolean resultatIf = false;
 		String nom = direction.getNom();
-		String axe = direction.getAxe();
 		Position position = null;
 
 		if (nom.equals(Direction.NORD.getNom())) {
@@ -242,7 +229,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		int r;
 		boolean resultatIf = false;
 		String nom = direction.getNom();
-		String axe = direction.getAxe();
 		Position position = null;
 
 		if (nom.equals(Direction.SUD.getNom())) {
@@ -286,7 +272,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		int r;
 		boolean resultatIf = false;
 		String nom = direction.getNom();
-		String axe = direction.getAxe();
 		Position position = null;
 
 		if (nom.equals(Direction.OUEST.getNom())) {
@@ -330,7 +315,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		int r;
 		boolean resultatIf = false;
 		String nom = direction.getNom();
-		String axe = direction.getAxe();
 		Position position = null;
 
 		if (nom.equals(Direction.EST.getNom())) {
@@ -374,14 +358,14 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		ArrayList<Obstacle> returnList = new ArrayList<Obstacle>();
 		ArrayList<Obstacle> list = algorithm.getListObstacle();
 		Position initialRobot = data.getRobotInitPosition();
-		
+
 		for (Obstacle obs: list) {
 			double x = initialRobot.x + obs.p.x;
 			double y = initialRobot.y + obs.p.y;
-			
+
 			returnList.add(new Obstacle(new Position(x, y)));
 		}
-		
+
 		return returnList;
 	}
 
@@ -390,25 +374,25 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		ArrayList<Position> returnList = new ArrayList<Position>();
 		ArrayList<Position> list = algorithm.getListPositionAlle();
 		Position initialRobot = data.getRobotInitPosition();
-		
+
 		for (Position p: list) {
 			double x = initialRobot.x + p.x;
 			double y = initialRobot.y + p.y;
-			
+
 			returnList.add(new Position(x, y));
 		}
-		
+
 		return returnList;
 	}
 
 	@Override
 	public int[][] getMapping() {
 		int retour[][] = getMapping();
-		
+
 		for (int i=0; i < retour.length; i++) {
 			for (int j=0; j < retour.length;j++);
 		}
-		
+
 		return retour;
 	}
 }

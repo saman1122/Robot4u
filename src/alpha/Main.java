@@ -27,90 +27,59 @@ import javafx.scene.Scene;
 import javafx.util.Duration;
 
 public class Main extends Application{
-  //---HARD-CODED-PARAMETERS---//
-  private static String fileName = HardCodedParameters.defaultParamFileName;
 
-  //---VARIABLES---//
-  private static DataService data;
-  private static EngineService engine;
-  private static ViewerService viewer;
-  private static AlgorithmService algorithm;
-  
-  private Timeline timeline;
-  private AnimationTimer timer;
+	//---VARIABLES---//
+	private static DataService data;
+	private static EngineService engine;
+	private static ViewerService viewer;
+	private static AlgorithmService algorithm;
 
-  //---EXECUTABLE---//
-  public static void main(String[] args) {
-    //readArguments(args);
+	private Timeline timeline;
+	private AnimationTimer timer;
 
-    data = new Data();
-    engine = new Engine();
-    viewer = new Viewer();
-    algorithm = new RobotIA();
+	//---EXECUTABLE---//
+	public static void main(String[] args) {
+		//readArguments(args);
 
-    ((Engine)engine).bindDataService(data);
-    ((Engine)engine).bindAlgorithmService(algorithm);
-    ((Viewer)viewer).bindReadService(data);
-    ((Viewer)viewer).bindStartEngineService(engine);
-    ((RobotIA)algorithm).bindSimulatorService(engine);
+		data = new Data();
+		engine = new Engine();
+		viewer = new Viewer();
+		algorithm = new RobotIA();
 
-    engine.init();
-    viewer.init();
-    viewer.startViewer();
+		((Engine)engine).bindDataService(data);
+		((Engine)engine).bindAlgorithmService(algorithm);
+		((Viewer)viewer).bindReadService(data);
+		((Viewer)viewer).bindStartEngineService(engine);
+		((RobotIA)algorithm).bindSimulatorService(engine);
 
-    launch(args);
-  }
+		engine.init();
+		viewer.init();
+		viewer.startViewer();
 
-  @Override public void start(Stage stage) {
-    Scene scene = new Scene(((Viewer)viewer).getPanel());
-    stage.setScene(scene);
-    stage.setWidth(HardCodedParameters.defaultWidth);
-    stage.setHeight(HardCodedParameters.defaultHeight);
-    stage.show();
-
-    timeline = new Timeline();
-    timeline.setCycleCount(Timeline.INDEFINITE);
-    timeline.setAutoReverse(true);
-
-    timer = new AnimationTimer() {
-      @Override
-        public void handle(long l) {
-    	  if(l%25==0)
-          scene.setRoot(((Viewer)viewer).getPanel());
-        }
-    };
-
-    timeline.getKeyFrames().add(new KeyFrame(Duration.millis(HardCodedParameters.enginePaceMillis)));
-    timeline.play();
-    timer.start();
-  }
-
-  //---ARGUMENTS---//
-  private static void readArguments(String[] args){
-    if (args.length>0 && args[0].charAt(0)!='-'){
-      System.err.println("Syntax error: use option -h for help.");
-      return;
-    }
-    for (int i=0;i<args.length;i++){
-      if (args[i].charAt(0)=='-'){
-	if (args[i+1].charAt(0)=='-'){
-	  System.err.println("Option "+args[i]+" expects an argument but received none.");
-	  return;
+		launch(args);
 	}
-	switch (args[i]){
-	  case "-inFile":
-	    fileName=args[i+1];
-	    break;
-	  case "-h":
-	    System.out.println("Options:");
-	    System.out.println(" -inFile FILENAME: (UNUSED AT THE MOMENT) set file name for input parameters. Default name is"+HardCodedParameters.defaultParamFileName+".");
-	    break;
-	  default:
-	    System.err.println("Unknown option "+args[i]+".");
-	    return;
+
+	@Override public void start(Stage stage) {
+		Scene scene = new Scene(((Viewer)viewer).getPanel());
+		stage.setScene(scene);
+		stage.setWidth(HardCodedParameters.defaultWidth);
+		stage.setHeight(HardCodedParameters.defaultHeight);
+		stage.show();
+
+		timeline = new Timeline();
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.setAutoReverse(true);
+
+		timer = new AnimationTimer() {
+			@Override
+			public void handle(long l) {
+				if(l%25==0)
+					scene.setRoot(((Viewer)viewer).getPanel());
+			}
+		};
+
+		timeline.getKeyFrames().add(new KeyFrame(Duration.millis(HardCodedParameters.enginePaceMillis)));
+		timeline.play();
+		timer.start();
 	}
-	i++;
-      }
-    }
-  }
 }
