@@ -6,7 +6,15 @@
  * ******************************************************/
 package specifications;
 
+import java.util.ArrayList;
+
+import data.Obstacle;
+import tools.Position;
+
 public interface AlgorithmService{
 	public void activation();
 	public void stepAction();
+	public int[][] getMapping();
+	public ArrayList<Position> getListPositionAlle();
+	public ArrayList<Obstacle> getListObstacle();
 }

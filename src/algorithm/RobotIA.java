@@ -164,7 +164,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 		boolean retour = false;
 		int checkMove = simulator.moveLeftCheck(direction);
 		
-		if (checkMove == 0) listObstacle.add(new Obstacle(new Position(0, 0)));
+		if (checkMove == 0) listObstacle.add(new Obstacle(getPositionAt(LEFT)));
 
 		if(checkMove >= 1) {
 			simulator.moveL(direction);
@@ -178,8 +178,11 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 
 	public boolean moveRight() {
 		boolean retour = false;
+		int checkMove = simulator.moveRightCheck(direction);
+		
+		if (checkMove == 0) listObstacle.add(new Obstacle(getPositionAt(RIGHT)));
 
-		if(simulator.moveRightCheck(direction) >= 1) {
+		if(checkMove >= 1) {
 			simulator.moveR(direction);
 			updateCurrentPosition(RIGHT);
 			changeDirection(RIGHT);
@@ -191,8 +194,11 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 
 	public boolean moveUp() {
 		boolean retour = false;
+		int checkMove = simulator.moveUpCheck(direction);
+		
+		if (checkMove == 0) listObstacle.add(new Obstacle(getPositionAt(UP)));
 
-		if(simulator.moveUpCheck(direction) >= 1) {
+		if(checkMove >= 1) {
 			simulator.moveU(direction);
 			updateCurrentPosition(UP);
 			changeDirection(UP);
@@ -203,8 +209,11 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	}
 	public boolean moveDown() {
 		boolean retour = false;
+		int checkMove = simulator.moveDownCheck(direction);
+		
+		if (checkMove == 0) listObstacle.add(new Obstacle(getPositionAt(DOWN)));
 
-		if(simulator.moveDownCheck(direction) >= 1) {
+		if(checkMove >= 1) {
 			simulator.moveD(direction);
 			updateCurrentPosition(DOWN);
 			changeDirection(DOWN);
@@ -281,6 +290,15 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 		
 		return new Position(x, y);
 	}
+
+	@Override
+	public int[][] getMapping() {return mapping;}
+
+	@Override
+	public ArrayList<Position> getListPositionAlle() {return listPositionAlle;}
+
+	@Override
+	public ArrayList<Obstacle> getListObstacle() {return listObstacle;}
 
 
 }

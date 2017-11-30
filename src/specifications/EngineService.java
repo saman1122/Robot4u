@@ -6,6 +6,6 @@
  * ******************************************************/
 package specifications;
 
-public interface EngineService extends StartEngineService, SimulatorService{
+public interface EngineService extends SimulatorService, Engine4ViewerService{
   public void init();
 }

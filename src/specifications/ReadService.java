@@ -14,16 +14,17 @@ import tools.Direction;
 import tools.Position;
 
 public interface ReadService {
-  public Position getRobotPosition();
-  public int getStepNumber();
-double getMapMinX();
-double getMapMaxX();
-double getMapMinY();
-double getMapMaxY();
-double getMiniMapMinX();
-double getMiniMapMinY();
-ArrayList<Position> getCheckedPositions();
-ConcurrentHashMap<Position,Integer> getKnownPositions();
-Direction getRobotDirection();
-ArrayList<Obstacle> getObstaclePositions();
+	public Position getRobotInitPosition();
+	public Position getRobotPosition();
+	public int getStepNumber();
+	double getMapMinX();
+	double getMapMaxX();
+	double getMapMinY();
+	double getMapMaxY();
+	double getMiniMapMinX();
+	double getMiniMapMinY();
+	ArrayList<Position> getCheckedPositions();
+	ConcurrentHashMap<Position,Integer> getKnownPositions();
+	Direction getRobotDirection();
+	ArrayList<Obstacle> getObstaclePositions();
 }

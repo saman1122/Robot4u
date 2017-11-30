@@ -7,5 +7,5 @@
 package specifications;
 
 public interface RequireStartEngineService {
-  public void bindStartEngineService(StartEngineService service);
+  public void bindStartEngineService(Engine4ViewerService service);
 }

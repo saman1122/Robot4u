@@ -14,9 +14,11 @@ import tools.Position;
 import specifications.AlgorithmService;
 import specifications.RequireAlgorithmService;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,15 +48,36 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		engineClock = new Timer();
 		
 
+		//Creation des obstacles
 	    data.addObstaclePositions(1,3);
 	    data.addObstaclePositions(2,3);
 	    data.addObstaclePositions(3,3);
 	    
-
 	    data.addObstaclePositions(0,1);
 	    data.addObstaclePositions(2,1);
 	    data.addObstaclePositions(3,1);
 	    //obstaclePositions.add(new Obstacle(new Position(4,1)));
+	    
+	    //initialisation position robot
+
+	    boolean onObstacle = true;
+	    Position initialPosRobot = null;
+	    
+	    while (onObstacle) {
+	    	onObstacle = false;
+	    	initialPosRobot = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)data.getMapMaxX() + 1),
+					ThreadLocalRandom.current().nextInt((int)data.getMapMinY(), (int)data.getMapMaxY() + 1));
+	    	
+	    	ArrayList<Obstacle> obstacles = data.getObstaclePositions();
+	    	
+	    	for (Obstacle obs:obstacles) {
+	    		if(obs.p.equals(initialPosRobot)) onObstacle = true;
+	    	}
+	    	
+	    }
+	    
+	    data.setRobotPosition(initialPosRobot);
+	    data.setRobotInitPosition(initialPosRobot);
 		
 	}
 
@@ -344,5 +367,48 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 				r = 0;
 		}
 		return r;
+	}
+
+	@Override
+	public ArrayList<Obstacle> getListObstacles() {
+		ArrayList<Obstacle> returnList = new ArrayList<Obstacle>();
+		ArrayList<Obstacle> list = algorithm.getListObstacle();
+		Position initialRobot = data.getRobotInitPosition();
+		
+		for (Obstacle obs: list) {
+			double x = initialRobot.x + obs.p.x;
+			double y = initialRobot.y + obs.p.y;
+			
+			returnList.add(new Obstacle(new Position(x, y)));
+		}
+		
+		return returnList;
+	}
+
+	@Override
+	public ArrayList<Position> getListPositionAlle() {
+		ArrayList<Position> returnList = new ArrayList<Position>();
+		ArrayList<Position> list = algorithm.getListPositionAlle();
+		Position initialRobot = data.getRobotInitPosition();
+		
+		for (Position p: list) {
+			double x = initialRobot.x + p.x;
+			double y = initialRobot.y + p.y;
+			
+			returnList.add(new Position(x, y));
+		}
+		
+		return returnList;
+	}
+
+	@Override
+	public int[][] getMapping() {
+		int retour[][] = getMapping();
+		
+		for (int i=0; i < retour.length; i++) {
+			for (int j=0; j < retour.length;j++);
+		}
+		
+		return retour;
 	}
 }
