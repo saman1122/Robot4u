@@ -14,10 +14,7 @@ import specifications.RequireSimulatorService;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-
 import data.Obstacle;
-import javafx.geometry.Pos;
 
 public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	private SimulatorService simulator;
