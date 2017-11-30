@@ -27,6 +27,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 public class Viewer implements ViewerService, RequireReadService, RequireStartEngineService{
+<<<<<<< HEAD
 	private ReadService data;
 	private StartEngineService startEngine;
 
@@ -110,16 +111,104 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 		//Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*HardCodedParameters.zoom+HardCodedParameters.zoom,data.getMiniMapMinY()*HardCodedParameters.zoom);
 
 		/*
+=======
+  private ReadService data;
+  private StartEngineService startEngine;
+
+  public Viewer(){}
+
+  @Override
+  public void bindReadService(ReadService service){
+    data=service;
+  }
+  
+  @Override
+  public void bindStartEngineService(StartEngineService service){
+    startEngine=service;
+  }
+
+  @Override
+  public void init(){
+  }
+
+  @Override
+  public void startViewer(){
+    startEngine.start();
+  }
+
+  @Override
+  public Group getPanel(){
+    
+	  
+	  final int zoom=HardCodedParameters.zoom;
+	    
+	    
+	  Group panel = new Group();
+	  Rectangle heroesAvatar = new Rectangle(data.getRobotPosition().x*zoom,data.getRobotPosition().y*zoom,zoom,zoom);
+    heroesAvatar.setFill(Color.rgb(10,10,10));
+    heroesAvatar.setEffect(new Lighting());
+    //heroesAvatar.setTranslateX(data.getHeroesPosition().x);
+    //heroesAvatar.setTranslateY(data.getHeroesPosition().y);
+    
+    //Limite map
+    //Image image = new Image("fond.jpg");
+    Rectangle limitMap = new Rectangle(data.getMapMinX()*zoom,data.getMapMinY()*zoom,(data.getMapMaxX()+1)*zoom,(data.getMapMaxY()+1)*zoom);
+    limitMap.setFill(Color.rgb(156,216,255,0.2));
+    
+    //Grille
+    double epaisseurLine = 0.5;
+    int tailleCase = zoom;
+    
+    for(int i=0; i<=data.getMapMaxX()+1; i++)
+    {
+      //lignes verticales
+      Line l = new Line(tailleCase * i, data.getMapMinY(), tailleCase * i, (data.getMapMaxY()+1)*tailleCase ); 
+      l.setStrokeWidth(epaisseurLine);
+      l.setStroke(Color.BLACK);
+      panel.getChildren().add(l);
+      if(i<=data.getMapMaxY()+1)
+      {     //lignes horizontales
+        l = new Line(data.getMapMinX(), tailleCase * i, (data.getMapMaxX()+1)*tailleCase, tailleCase * i ); 
+        l.setStrokeWidth(epaisseurLine);
+        l.setStroke(Color.BLACK);
+        panel.getChildren().add(l);
+      }
+    }
+    
+    //Marquer passage checké
+    for(Position p:data.getCheckedPositions())
+    {
+    Rectangle checked  = new Rectangle(p.x*zoom,p.y*zoom,zoom,zoom);
+    checked.setFill(Color.rgb(50,200,50,0.2));
+    panel.getChildren().add(checked);
+    }
+    
+    /*
+    //Génération d'obstacles
+    for(Obstacle o:data.getObstaclePositions())
+    {
+    Rectangle checked  = new Rectangle(o.p.x*zoom,o.p.y*zoom,zoom,zoom);
+    checked.setFill(Color.rgb(255,0,0,1));
+    panel.getChildren().add(checked);
+    }
+    */
+
+    //Génération miniMap
+    //Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*zoom+zoom,data.getMiniMapMinY()*zoom);
+    
+    /*
+>>>>>>> 16dcb4783878f028d18181c482f696a84cb8a703
     Set<Entry<Position,Integer>> set = data.getKnownPositions().entrySet();
     Iterator<Map.Entry<Position, Integer>> it = set.iterator();
 
     while(it.hasNext()){
        Map.Entry<Position, Integer> entry = it.next();
-       Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*HardCodedParameters.zoom+HardCodedParameters.zoom+entry.getKey().x*HardCodedParameters.zoom,data.getMiniMapMinY()*HardCodedParameters.zoom+entry.getKey().y*HardCodedParameters.zoom,50,50);
+       Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*zoom+zoom+entry.getKey().x*zoom,data.getMiniMapMinY()*zoom+entry.getKey().y*zoom,50,50);
        System.out.println("coordonnees : "+entry.getKey().x+","+entry.getKey().y+"  etat : "+entry.getValue());
        miniMap.setFill(Color.rgb(10,10,10,0.5));
        panel.getChildren().add(miniMap);
     }
+<<<<<<< HEAD
 		 */
 
 
@@ -145,6 +234,33 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 
 
 		/*
+=======
+    */
+    
+    
+    Set<Position> keys = data.getKnownPositions().keySet();
+	for(Position key: keys){
+		   Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*zoom+zoom+key.x*zoom/2,data.getMiniMapMinY()*zoom+zoom+key.y*zoom/2,zoom/2,zoom/2);
+	       System.out.println("coordonnees : "+key.x+","+key.y+" state : "+data.getKnownPositions().get(key));
+	       
+	       if(data.getKnownPositions().get(key) == 0)//obstacle
+	       miniMap.setFill(Color.rgb(255,0,0,1));
+	       
+	       if(data.getKnownPositions().get(key) == 1)//non connu
+		       miniMap.setFill(Color.rgb(0,0,0,0.5));
+	       
+	       if(data.getKnownPositions().get(key) >= 2)//connu
+		       miniMap.setFill(Color.rgb(50,200,50,0.2));
+	       
+	       
+	       panel.getChildren().add(miniMap);
+	}
+	
+    
+    
+    
+    /*
+>>>>>>> 16dcb4783878f028d18181c482f696a84cb8a703
     //Objet immobile : cerise
     Circle ceriseAvatar = new Circle(2,  Color.rgb(255,100,10));
     ceriseAvatar.setEffect(new Lighting());
