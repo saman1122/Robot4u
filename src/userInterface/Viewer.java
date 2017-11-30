@@ -27,7 +27,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 public class Viewer implements ViewerService, RequireReadService, RequireStartEngineService{
-<<<<<<< HEAD
 	private ReadService data;
 	private StartEngineService startEngine;
 
@@ -208,34 +207,6 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
        miniMap.setFill(Color.rgb(10,10,10,0.5));
        panel.getChildren().add(miniMap);
     }
-<<<<<<< HEAD
-		 */
-
-
-		Set<Position> keys = data.getKnownPositions().keySet();
-		for(Position key: keys){
-			Rectangle miniMap = new Rectangle(data.getMiniMapMinX()*HardCodedParameters.zoom+HardCodedParameters.zoom+key.x*HardCodedParameters.zoom/2,data.getMiniMapMinY()*HardCodedParameters.zoom+key.y*HardCodedParameters.zoom/2,HardCodedParameters.zoom/2,HardCodedParameters.zoom/2);
-			System.out.println("coordonnees : "+key.x+","+key.y+" state : "+data.getKnownPositions().get(key));
-
-			if(data.getKnownPositions().get(key) == 0)//obstacle
-				miniMap.setFill(Color.rgb(255,0,0,1));
-
-			if(data.getKnownPositions().get(key) == 1)//non connu
-				miniMap.setFill(Color.rgb(0,0,0,0.5));
-
-			if(data.getKnownPositions().get(key) >= 2)//connu
-				miniMap.setFill(Color.rgb(50,200,50,0.2));
-
-
-			panel.getChildren().add(miniMap);
-		}
-
-
-
-
-		/*
-=======
-    */
     
     
     Set<Position> keys = data.getKnownPositions().keySet();
@@ -260,7 +231,6 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
     
     
     /*
->>>>>>> 16dcb4783878f028d18181c482f696a84cb8a703
     //Objet immobile : cerise
     Circle ceriseAvatar = new Circle(2,  Color.rgb(255,100,10));
     ceriseAvatar.setEffect(new Lighting());
