@@ -9,8 +9,8 @@ package specifications;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
-import data.Obstacle;
 import tools.Direction;
+import tools.Obstacle;
 import tools.Position;
 
 public interface ReadService {
@@ -23,8 +23,6 @@ public interface ReadService {
 	double getMapMaxY();
 	double getMiniMapMinX();
 	double getMiniMapMinY();
-	ArrayList<Position> getCheckedPositions();
-	ConcurrentHashMap<Position,Integer> getKnownPositions();
 	Direction getRobotDirection();
 	ArrayList<Obstacle> getObstaclePositions();
 }

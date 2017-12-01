@@ -10,6 +10,7 @@ import specifications.EngineService;
 import specifications.DataService;
 import specifications.RequireDataService;
 import tools.Direction;
+import tools.Obstacle;
 import tools.Position;
 import specifications.AlgorithmService;
 import specifications.RequireAlgorithmService;
@@ -22,8 +23,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import data.Obstacle;
 
 public class Engine implements EngineService, RequireDataService, RequireAlgorithmService{
 	private Timer engineClock;
@@ -103,36 +102,10 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 				if(start>2)
 				{
 					System.out.println("\n --------Heroes position: "+data.getRobotPosition().x+", "+data.getRobotPosition().y);
-					data.addCheckedPositions(data.getRobotPosition().x,data.getRobotPosition().y);
-
-
-					//ajoute coordonnées à la map (x,y,state) | state : 0 = obstacle | state : 1 = non connu | state : 2 = connu
-					data.addKnownPositions(data.getRobotPosition().x,data.getRobotPosition().y,2);//current position
-					data.addKnownPositions(data.getRobotPosition().x-1,data.getRobotPosition().y,moveLeftCheck(Direction.NORD));//left
-					data.addKnownPositions(data.getRobotPosition().x,data.getRobotPosition().y-1,moveUpCheck(Direction.NORD));//up
-					data.addKnownPositions(data.getRobotPosition().x+1,data.getRobotPosition().y,moveRightCheck(Direction.NORD));//right
-					data.addKnownPositions(data.getRobotPosition().x,data.getRobotPosition().y+1,moveDownCheck(Direction.NORD));//down
-
 
 					algorithm.stepAction();
 
 					data.setStepNumber(data.getStepNumber()+1);
-
-					System.out.print(" \n positions known \n");
-
-					Set<Entry<Position,Integer>> set = data.getKnownPositions().entrySet();
-					Iterator<Map.Entry<Position, Integer>> it = set.iterator();
-
-					while(it.hasNext()){
-						Map.Entry<Position, Integer> entry = it.next();
-						System.out.println("coord : "+entry.getKey().x+","+entry.getKey().y+"  etat : "+entry.getValue());
-					}
-
-					System.out.println(" \n pos checked");
-					for (Position p:data.getCheckedPositions()){
-						System.out.print("liste de positionX "+p.x);
-						System.out.print("liste de positionY "+p.y);
-					}
 
 				}
 			}
@@ -219,10 +192,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		if(resultatIf)
 		{
 			r=1;
-			for(Position p : data.getCheckedPositions()){
-				if(p.x==position.x && p.y==position.y)
-					r=2;
-			}
 		} else {
 			r= 0;
 		}
@@ -262,10 +231,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		if(resultatIf)
 		{
 			r=1;
-			for(Position p : data.getCheckedPositions()){
-				if(p.x==position.x && p.y==position.y)
-					r=2;
-			}
 		} else {
 			r= 0;
 		}
@@ -305,10 +270,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		if(resultatIf)
 		{
 			r=1;
-			for(Position p : data.getCheckedPositions()){
-				if(p.x==position.x && p.y==position.y)
-					r=2;
-			}
 		} else {
 			r= 0;
 		}
@@ -348,10 +309,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		if(resultatIf)
 		{
 			r=1;
-			for(Position p : data.getCheckedPositions()){
-				if(p.x==position.x && p.y==position.y)
-					r=2;
-			}
 		} else {
 			r= 0;
 		}

@@ -13,8 +13,6 @@ public interface WriteService {
 	public void setRobotInitPosition(Position p);
 	public void setRobotPosition(Position p);
 	public void setStepNumber(int n);
-	void addCheckedPositions(double x, double y);
-	void addKnownPositions(double x, double y, int state);
 	void setRobotDirection(Direction direction);
 	void addObstaclePositions(double x, double y);
 }

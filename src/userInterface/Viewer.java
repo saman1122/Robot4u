@@ -7,6 +7,7 @@
 package userInterface;
 
 import tools.HardCodedParameters;
+import tools.Obstacle;
 import tools.Position;
 import specifications.ViewerService;
 import specifications.Engine4ViewerService;
@@ -15,7 +16,7 @@ import specifications.RequireReadService;
 import specifications.RequireStartEngineService;
 
 import java.util.ArrayList;
-import data.Obstacle;
+
 import javafx.scene.Group;
 import javafx.scene.effect.Lighting;
 import javafx.scene.paint.Color;
@@ -85,7 +86,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 		}
 
 		//Marquer passage checké
-		for(Position p:data.getCheckedPositions())
+		for(Position p:engine.getListPositionAlle())
 		{
 			Rectangle checked  = new Rectangle(p.x*HardCodedParameters.zoom,p.y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
 			checked.setFill(Color.rgb(50,200,50,0.2));

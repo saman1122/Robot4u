@@ -9,11 +9,11 @@ package algorithm;
 import specifications.AlgorithmService;
 import specifications.SimulatorService;
 import tools.Direction;
+import tools.Obstacle;
 import tools.Position;
 import specifications.RequireSimulatorService;
 
 import java.util.ArrayList;
-import data.Obstacle;
 
 public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	private SimulatorService simulator;

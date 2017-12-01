@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import specifications.DataService;
 import tools.Direction;
+import tools.Obstacle;
 import tools.Position;
 
 public class Data implements DataService{
@@ -17,8 +18,6 @@ public class Data implements DataService{
 	private Position robotPosition;
 	private Position positionOrigine;
 	private Direction robotDirection;
-	private ConcurrentHashMap<Position,Integer> knownPositions;
-	private ArrayList<Position> checkedPositions;
 	private ArrayList<Obstacle> obstaclePositions;
 
 
@@ -46,8 +45,6 @@ public class Data implements DataService{
 
 		stepNumber = 0;
 
-		knownPositions = new ConcurrentHashMap<Position,Integer>();
-		checkedPositions = new ArrayList<Position>();
 		obstaclePositions = new ArrayList<Obstacle>();
 
 	}
@@ -83,96 +80,11 @@ public class Data implements DataService{
 	}
 
 	@Override
-	public ConcurrentHashMap<Position,Integer> getKnownPositions() {
-		return knownPositions;
-	}
-
-	@Override //si meme position overwrite pour garder dernier state
-	public void addKnownPositions(double x,double y,int state) {
-
-		/*
-	Position position = new Position(x, y);
-	Set<Position> keys = getKnownPositions().keySet();
-
-    for(Position key: keys){
-        System.out.println("coord : "+key.x+","+key.y+" état : "+ getKnownPositions().get(key));
-        if(position.equals(getKnownPositions().get(key)))
-        {
-        	knownPositions.remove(new Position(x,y));
-        }
-    }*/
-		//knownPositions.remove(new Position(x,y));
-		knownPositions.put(new Position(x,y) , state);
-		/*
-	Set<Entry<Position,Integer>> set = getKnownPositions().entrySet();
-    Iterator<Map.Entry<Position, Integer>> it = set.iterator();
-
-    //int a=0;
-
-    //ArrayList<Position> listASuppr = new ArrayList<Position>();
-    while(it.hasNext()){
-       Map.Entry<Position, Integer> entry = it.next();
-       if(position.equals(entry.getKey()))
-       {
-    	   //listASuppr.add(entry.getKey());
-    	   //System.out.print(entry.getKey());
-    	   knownPositions.remove(new Position(x,y));
-       //a=1;
-       }
-    }
-		 */
-
-		/*
-    if(a==0)
-    {
-		 */
-
-		//}
-
-		/*
-	Set<Position> keys = getKnownPositions().keySet();
-
-    for(Position key: keys){
-        System.out.println("coord : "+key.x+","+key.y+" état : "+ getKnownPositions().get(key));
-    }
-		 */
-
-
-	}
-
-
-	@Override
-	public ArrayList<Position> getCheckedPositions() {//Extraction depuis knownPosition
-		/* 
-	Set<Integer> keys = getKnownPositions().keySet();
-	for(int key: keys){
-        if(key==1)
-        	checkedPositions.add(getKnownPositions().get(key));       	
-    }
-		 */
-		return checkedPositions;
-	}
-
-	@Override
-	public ArrayList<Obstacle> getObstaclePositions() {//Extraction depuis knownPosition
-		/* 
-	Set<Integer> keys = getKnownPositions().keySet();
-	for(int key: keys){
-        if(key==1)
-        	checkedPositions.add(getKnownPositions().get(key));       	
-    }
-		 */
-		return obstaclePositions;
-	}
+	public ArrayList<Obstacle> getObstaclePositions() {return obstaclePositions;}
 
 	@Override
 	public void addObstaclePositions(double x,double y) {
 		obstaclePositions.add(new Obstacle(new Position(x,y)));
-	}
-
-	@Override
-	public void addCheckedPositions(double x,double y) {//garde doublon pour mesurer l'optimisation
-		checkedPositions.add(new Position(x,y));
 	}
 
 	@Override
