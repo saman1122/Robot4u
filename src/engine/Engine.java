@@ -49,14 +49,25 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 
 
 		//Creation des obstacles
-		data.addObstaclePositions(1,3);
-		data.addObstaclePositions(2,3);
-		data.addObstaclePositions(3,3);
+		int nbrObstacles = 5;
 
-		data.addObstaclePositions(0,1);
-		data.addObstaclePositions(2,1);
-		data.addObstaclePositions(3,1);
-		//obstaclePositions.add(new Obstacle(new Position(4,1)));
+		for (int i = 0; i < nbrObstacles; i++) {
+			boolean isNotNewPosition = true;
+			Position p = null;
+			while(isNotNewPosition) {
+				isNotNewPosition = false;
+
+				p = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)data.getMapMaxX() + 1),
+						ThreadLocalRandom.current().nextInt((int)data.getMapMinY(), (int)data.getMapMaxY() + 1));
+
+				ArrayList<Obstacle> listObstacles = data.getObstaclePositions();
+				for(Obstacle obs: listObstacles) {
+					if (p.equals(obs.p)) isNotNewPosition = true;
+				}
+			}
+
+			data.addObstaclePositions(p.x,p.y);
+		}
 
 		//initialisation position robot
 
