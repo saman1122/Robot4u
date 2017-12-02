@@ -7,6 +7,7 @@
 package specifications;
 
 import tools.Direction;
+import tools.SensorSimulator;
 
 public interface SimulatorService{
 int moveLeftCheck(Direction direction);
@@ -17,4 +18,5 @@ void moveL(Direction direction);
 void moveR(Direction direction);
 void moveU(Direction direction);
 void moveD(Direction direction);
+SensorSimulator getSensorResult(Direction direction);
 }

@@ -25,7 +25,7 @@ public class HardCodedParameters {
                           displayZoneXZoomStep = 5,
                           displayZoneYZoomStep = 5;
   public static final double displayZoneAlphaZoomStep = 0.98;
-  public static final int zoom = 100;
+  public static final int zoom = 50;
 
   //---MISCELLANOUS---//
   public static final Object loadingLock = new Object();

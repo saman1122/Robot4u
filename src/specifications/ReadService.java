@@ -7,7 +7,6 @@
 package specifications;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 
 import tools.Direction;
 import tools.Obstacle;

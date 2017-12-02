@@ -11,9 +11,13 @@ import specifications.SimulatorService;
 import tools.Direction;
 import tools.Obstacle;
 import tools.Position;
+import tools.SensorSimulator;
 import specifications.RequireSimulatorService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	private SimulatorService simulator;
@@ -48,6 +52,11 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	public void activation(){
 		if (moveLeft()) while (moveUp());
 
+		//		if (moveRight()) {
+		//			while (!moveLeft()) moveUp();
+		//
+		//			while (moveUp());
+		//		}
 
 		direction = Direction.NORD;
 		//simulator.moveRight();
@@ -56,36 +65,34 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	public boolean mapping() {
 		boolean retour = false;
 		if (!mappingFinish) {
-			boolean stepRealised = false;
 
-			while(!stepRealised) {
+			useSensor();
 
-				if(moveLeft()) {
-					stepRealised = true;
-				}else
-				{
-					System.out.println("moveL impossible");
-					if(moveUp()) {
-						stepRealised = true;
-					}else
-					{
-						System.out.println("moveU impossible");
-						if(moveRight()) {
-							stepRealised = true;
-						}else
-						{
-							System.out.println("moveR impossible");
-							if(moveDown()) {
-								stepRealised = true;
-							}else
-							{
-								System.out.println("moveD impossible");
-								System.out.println("NO MOVE AVAILABLE");
-							}
+			if(moveLeft()) {
+			}else {
+				System.out.println("moveL impossible");
+				if(moveUp()) {
+				}else {
+					System.out.println("moveU impossible");
+					if(moveRight()) {
+					}else {
+						System.out.println("moveR impossible");
+						if(moveDown()) {
+						}else {
+							System.out.println("moveD impossible");
+							System.out.println("NO MOVE AVAILABLE");
 						}
 					}
 				}
 			}
+
+			if (countNbrTour() == 5) {
+				createMapping();
+
+				mappingFinish = true;
+			}
+
+
 
 			System.out.println("Current position" + currentPosition);
 		}
@@ -93,10 +100,50 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 		return retour;
 	}
 
+	private void createMapping() {
+		int xMin = Integer.MAX_VALUE,xMax = Integer.MIN_VALUE, yMin = Integer.MAX_VALUE, yMax = Integer.MIN_VALUE;
+		for (Obstacle obs: listObstacle) {
+			if (obs.p.x < xMin) xMin = (int) obs.p.x;
+			if (obs.p.x > xMax) xMax = (int) obs.p.x;
+			if (obs.p.y < yMin) yMin = (int) obs.p.y;
+			if (obs.p.y > yMax) yMax = (int) obs.p.y;
+		}
+		mapping = new int[xMax - xMin + 1][];
+
+		for (int i = 0; i < mapping.length; i++) {
+			mapping[i] = new int [yMax - yMin + 1];
+		}
+
+
+		for (int i = 0; i<mapping.length;i++) {
+			for (int j = 0; j < mapping[i].length;j++) {
+				mapping[i][j]=0;
+			}
+		}
+
+		for (Obstacle obs: listObstacle) {
+			mapping[(int)obs.p.x - xMin][(int)obs.p.y - yMin] = 1;
+		}
+
+		for (Position p: listPositionAlle) {
+			mapping[(int)p.x - xMin][(int)p.y - yMin] = 2;
+		}
+
+		for (int i = 0; i<mapping.length;i++) {
+			System.out.println();
+			for (int j = 0; j < mapping[i].length;j++) {
+				System.out.print( mapping[i][j] + "|");
+			}
+		}
+		System.out.println();
+		System.out.println();
+
+	}
+
 	@Override
 	public void stepAction(){
 		if (mapping()) {
-
+			//Mapping finish
 		}
 	}
 
@@ -288,6 +335,41 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 		return new Position(x, y);
 	}
 
+	private void useSensor() {
+		SensorSimulator sensor = simulator.getSensorResult(direction);
+
+		Position obsL = sensor.getObstacleL();
+		Position obsR = sensor.getObstacleR();
+		Position obsD = sensor.getObstacleD();
+		Position obsU = sensor.getObstacleU();
+
+		obsL.x += currentPosition.x;
+		obsL.y += currentPosition.y;
+		obsR.x += currentPosition.x;
+		obsR.y += currentPosition.y;
+		obsU.x += currentPosition.x;
+		obsU.y += currentPosition.y;
+		obsD.x += currentPosition.x;
+		obsD.y += currentPosition.y;
+
+		listObstacle.add(new Obstacle(obsL));
+		listObstacle.add(new Obstacle(obsR));
+		listObstacle.add(new Obstacle(obsU));
+		listObstacle.add(new Obstacle(obsD));
+	}
+
+	private int countNbrTour() {
+		int retour = 0;
+
+		Set<Position> unique = new HashSet<Position>(listPositionAlle);
+		for (Position key : unique) {
+			int nbr = Collections.frequency(listPositionAlle, key);
+			if (nbr > retour) retour = nbr;
+		}
+
+		return retour;
+	}
+
 	@Override
 	public int[][] getMapping() {return mapping;}
 
@@ -296,6 +378,4 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 
 	@Override
 	public ArrayList<Obstacle> getListObstacle() {return listObstacle;}
-
-
 }

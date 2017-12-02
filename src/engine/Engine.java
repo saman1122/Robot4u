@@ -12,15 +12,12 @@ import specifications.RequireDataService;
 import tools.Direction;
 import tools.Obstacle;
 import tools.Position;
+import tools.SensorSimulator;
 import specifications.AlgorithmService;
 import specifications.RequireAlgorithmService;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,7 +45,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 
 
 		//Creation des obstacles
-		int nbrObstacles = 5;
+		int nbrObstacles = 15;
 
 		for (int i = 0; i < nbrObstacles; i++) {
 			boolean isNotNewPosition = true;
@@ -109,7 +106,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 
 				}
 			}
-		},0,700);
+		},0,400);
 	}
 
 
@@ -361,6 +358,70 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 			for (int j=0; j < retour.length;j++);
 		}
 
+		return retour;
+	}
+	
+	@Override
+	public SensorSimulator getSensorResult(Direction direction) {
+		SensorSimulator retour = new SensorSimulator();
+		Position positionRobot = data.getRobotPosition();
+		
+		double xMin = 0 - (positionRobot.x - (data.getMapMinX() - 1));
+		double xMax = 0 - (positionRobot.x - (data.getMapMaxX() + 1));
+		double yMin = 0 - (positionRobot.y - (data.getMapMinY() - 1));
+		double yMax = 0 - (positionRobot.y - (data.getMapMaxY() + 1));
+		
+		
+		for (Obstacle obs:data.getObstaclePositions()) {
+			
+			if (obs.p.x == positionRobot.x) {
+				double resultatY = positionRobot.y - obs.p.y;
+				
+				if (resultatY < 0 && 0 - resultatY < yMax) {
+					yMax = 0 - resultatY;
+				}else if (resultatY > 0 && 0 - resultatY > yMin) {
+					yMin = 0 - resultatY;
+				}
+			}
+			
+			if (obs.p.y == positionRobot.y) {
+				double resultatX = positionRobot.x - obs.p.x;
+				
+				if (resultatX < 0 && 0 - resultatX < xMax) {
+					xMax = 0 - resultatX;
+				}else if (resultatX > 0 && 0 - resultatX > xMin) {
+					xMin = 0 - resultatX;
+				}
+			}
+		}
+		
+		switch (direction) {
+		case NORD:
+			retour.setObstacleR(new Position(xMax, 0));
+			retour.setObstacleL(new Position(xMin, 0));
+			retour.setObstacleU(new Position(0, yMin));
+			retour.setObstacleD(new Position(0, yMax));
+			break;
+		case SUD:
+			retour.setObstacleR(new Position(xMin, 0));
+			retour.setObstacleL(new Position(xMax, 0));
+			retour.setObstacleU(new Position(0, yMax));
+			retour.setObstacleD(new Position(0, yMin));
+			break;
+		case EST:
+			retour.setObstacleD(new Position(xMin, 0));
+			retour.setObstacleU(new Position(xMax, 0));
+			retour.setObstacleR(new Position(0, yMax));
+			retour.setObstacleL(new Position(0, yMin));
+			break;
+		case OUEST:
+			retour.setObstacleD(new Position(xMin, 0));
+			retour.setObstacleU(new Position(xMax, 0));
+			retour.setObstacleR(new Position(0, yMin));
+			retour.setObstacleL(new Position(0, yMax));
+			break;
+		}
+		
 		return retour;
 	}
 }

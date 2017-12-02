@@ -7,7 +7,6 @@
 package data;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 import specifications.DataService;
 import tools.Direction;
 import tools.Obstacle;
@@ -36,9 +35,9 @@ public class Data implements DataService{
 	public Data(){
 
 		mapMinX = 0;
-		mapMaxX = 4;
+		mapMaxX = 10;
 		mapMinY = 0;
-		mapMaxY = 3;
+		mapMaxY = 6;
 
 		miniMapMinX = mapMaxX+1;
 		miniMapMinY = mapMinY;
