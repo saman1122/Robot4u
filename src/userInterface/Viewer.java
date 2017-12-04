@@ -6,7 +6,11 @@
  * ******************************************************/
 package userInterface;
 
+import tools.Canape;
+import tools.Chaise;
 import tools.HardCodedParameters;
+import tools.Lit;
+import tools.ObjectObstacle;
 import tools.Obstacle;
 import tools.Position;
 import specifications.ViewerService;
@@ -19,6 +23,8 @@ import java.util.ArrayList;
 
 import javafx.scene.Group;
 import javafx.scene.effect.Lighting;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
@@ -66,24 +72,24 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 		limitMap.setFill(Color.rgb(156,216,255,0.2));
 
 		//Grille
-		double epaisseurLine = 0.5;
-		int tailleCase = HardCodedParameters.zoom;
-
-		for(int i=0; i<=data.getMapMaxX()+1; i++)
-		{
-			//lignes verticales
-			Line l = new Line(tailleCase * i, data.getMapMinY(), tailleCase * i, (data.getMapMaxY()+1)*tailleCase ); 
-			l.setStrokeWidth(epaisseurLine);
-			l.setStroke(Color.BLACK);
-			panel.getChildren().add(l);
-			if(i<=data.getMapMaxY()+1)
-			{     //lignes horizontales
-				l = new Line(data.getMapMinX(), tailleCase * i, (data.getMapMaxX()+1)*tailleCase, tailleCase * i ); 
-				l.setStrokeWidth(epaisseurLine);
-				l.setStroke(Color.BLACK);
-				panel.getChildren().add(l);
-			}
-		}
+//		double epaisseurLine = 0.5;
+//		int tailleCase = HardCodedParameters.zoom;
+//
+//		for(int i=0; i<=data.getMapMaxX()+1; i++)
+//		{
+//			//lignes verticales
+//			Line l = new Line(tailleCase * i, data.getMapMinY(), tailleCase * i, (data.getMapMaxY()+1)*tailleCase ); 
+//			l.setStrokeWidth(epaisseurLine);
+//			l.setStroke(Color.BLACK);
+//			panel.getChildren().add(l);
+//			if(i<=data.getMapMaxY()+1)
+//			{     //lignes horizontales
+//				l = new Line(data.getMapMinX(), tailleCase * i, (data.getMapMaxX()+1)*tailleCase, tailleCase * i ); 
+//				l.setStrokeWidth(epaisseurLine);
+//				l.setStroke(Color.BLACK);
+//				panel.getChildren().add(l);
+//			}
+//		}
 
 		//Marquer passage checké
 		for(Position p:engine.getListPositionAlle())
@@ -97,8 +103,32 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 		for(Obstacle o:data.getObstaclePositions())
 		{
 			Rectangle checked  = new Rectangle(o.p.x*HardCodedParameters.zoom,o.p.y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
-			checked.setFill(Color.rgb(255,0,0,1));
+			checked.setFill(Color.RED);
 			panel.getChildren().add(checked);
+		}
+		
+		//Generation obstacle objets
+		
+		for(Object obj: data.getObstacleObject()) {
+			
+			ObjectObstacle objtO = (ObjectObstacle) obj;
+			ImageView img = null;
+			
+			if (obj.getClass() == Canape.class) {
+				img = new ImageView(new Image("file:src/images/canapeVueHaut.jpg"));
+			} else if (obj.getClass() == Lit.class) {
+				img = new ImageView(new Image("file:src/images/litVueHaut.jpg"));
+			} else if (obj.getClass() == Chaise.class) {
+				img = new ImageView(new Image("file:src/images/chaise.jpg"));
+			}
+			
+			img.setTranslateX(objtO.getFirst().x*zoom);
+			img.setTranslateY(objtO.getFirst().y*zoom);
+			img.setFitHeight(objtO.getHeight()*zoom);
+			img.setFitWidth(objtO.getWidth()*zoom);
+
+			panel.getChildren().add(img);
+			
 		}
 
 		//Génération miniMap

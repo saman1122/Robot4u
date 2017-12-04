@@ -24,4 +24,5 @@ public interface ReadService {
 	double getMiniMapMinY();
 	Direction getRobotDirection();
 	ArrayList<Obstacle> getObstaclePositions();
+	ArrayList<Object> getObstacleObject();
 }

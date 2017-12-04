@@ -9,7 +9,11 @@ package engine;
 import specifications.EngineService;
 import specifications.DataService;
 import specifications.RequireDataService;
+import tools.Canape;
+import tools.Chaise;
 import tools.Direction;
+import tools.Lit;
+import tools.ObjectObstacle;
 import tools.Obstacle;
 import tools.Position;
 import tools.SensorSimulator;
@@ -17,6 +21,7 @@ import specifications.AlgorithmService;
 import specifications.RequireAlgorithmService;
 
 import java.util.ArrayList;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,30 +49,54 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		engineClock = new Timer();
 
 
-		//Creation des obstacles
-		int nbrObstacles = 15;
+		//		//Creation des obstacles
+		//		int nbrObstacles = 15;
+		//
+		//		for (int i = 0; i < nbrObstacles; i++) {
+		//			boolean isNotNewPosition = true;
+		//			Position p = null;
+		//			while(isNotNewPosition) {
+		//				isNotNewPosition = false;
+		//
+		//				p = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)data.getMapMaxX() + 1),
+		//						ThreadLocalRandom.current().nextInt((int)data.getMapMinY(), (int)data.getMapMaxY() + 1));
+		//
+		//				ArrayList<Obstacle> listObstacles = data.getObstaclePositions();
+		//				for(Obstacle obs: listObstacles) {
+		//					if (p.equals(obs.p)) isNotNewPosition = true;
+		//				}
+		//			}
+		//
+		//			data.addObstaclePositions(p.x,p.y);
+		//		}
 
-		for (int i = 0; i < nbrObstacles; i++) {
-			boolean isNotNewPosition = true;
-			Position p = null;
-			while(isNotNewPosition) {
-				isNotNewPosition = false;
-
-				p = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)data.getMapMaxX() + 1),
-						ThreadLocalRandom.current().nextInt((int)data.getMapMinY(), (int)data.getMapMaxY() + 1));
-
-				ArrayList<Obstacle> listObstacles = data.getObstaclePositions();
-				for(Obstacle obs: listObstacles) {
-					if (p.equals(obs.p)) isNotNewPosition = true;
-				}
-			}
-
-			data.addObstaclePositions(p.x,p.y);
+		//Creation object obstacles
+		int nbrCanape = 1;
+		int nbrLit = 1;
+		int nbrChaise = 2;
+		try {
+			for (int i = 0; i < nbrCanape;i++)
+				data.addObstacleObject(createCanape());
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			for (int i = 0; i < nbrLit;i++)
+			data.addObstacleObject(createLit());
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			for (int i = 0; i < nbrChaise;i++)
+				data.addObstacleObject(createChaise());
+		}catch (Exception e) {
+			// TODO: handle exception
 		}
 
 		//initialisation position robot
 
 		boolean onObstacle = true;
+		int nbrEssai = 0;
 		Position initialPosRobot = null;
 
 		while (onObstacle) {
@@ -80,12 +109,67 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 			for (Obstacle obs:obstacles) {
 				if(obs.p.equals(initialPosRobot)) onObstacle = true;
 			}
+			
+			nbrEssai++;
+			
+			if (nbrEssai > 10) {
+				initialPosRobot = new Position(0, 0);
+				onObstacle = false;
+			}
 
 		}
 
 		data.setRobotPosition(initialPosRobot);
 		data.setRobotInitPosition(initialPosRobot);
 
+	}
+
+	private ObjectObstacle createObjectObstacle(Class classN) throws InstantiationException, IllegalAccessException {
+		ObjectObstacle obj = (ObjectObstacle) classN.newInstance();
+		boolean isNotNewPosition = true;
+		int nbrTentative = 0;
+		Position p = null;
+		ArrayList<Obstacle> listObstacle = new ArrayList<Obstacle>();
+		while(isNotNewPosition) {
+			isNotNewPosition = false;
+			p = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)(data.getMapMaxX() - obj.getHeight()) + 1 ),
+					ThreadLocalRandom.current().nextInt((int)data.getMapMinY(), (int)(data.getMapMaxY()- obj.getWidth()) + 1 ));
+
+			for (int i = 0; i < obj.getWidth(); i++) {
+				for (int j = 0; j < obj.getHeight(); j++) {
+					Position p2 = new Position(p.x+i, p.y+j);
+					listObstacle.add(new Obstacle(p2));
+				}
+			}
+
+			ArrayList<Obstacle> listTemp = data.getObstaclePositions();
+			for(Obstacle obs: listTemp) {
+				for (Obstacle obs2: listObstacle) {
+					if (obs2.p.equals(obs.p)) isNotNewPosition = true;
+				}
+			}
+
+			nbrTentative++;
+
+			if (nbrTentative > 10) new Exception();
+		}
+
+		obj.setFirst(p);
+		obj.setListPoints(listObstacle);
+
+		return obj;
+	}
+
+	private Canape createCanape() throws InstantiationException, IllegalAccessException {
+		return (Canape) createObjectObstacle(Canape.class);
+	}
+
+	private Lit createLit() throws InstantiationException, IllegalAccessException {
+		return (Lit) createObjectObstacle(Lit.class);
+	}
+
+	private Chaise createChaise() throws InstantiationException, IllegalAccessException {
+		return (Chaise) createObjectObstacle(Chaise.class);
 	}
 
 	@Override
@@ -360,33 +444,33 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 
 		return retour;
 	}
-	
+
 	@Override
 	public SensorSimulator getSensorResult(Direction direction) {
 		SensorSimulator retour = new SensorSimulator();
 		Position positionRobot = data.getRobotPosition();
-		
+
 		double xMin = 0 - (positionRobot.x - (data.getMapMinX() - 1));
 		double xMax = 0 - (positionRobot.x - (data.getMapMaxX() + 1));
 		double yMin = 0 - (positionRobot.y - (data.getMapMinY() - 1));
 		double yMax = 0 - (positionRobot.y - (data.getMapMaxY() + 1));
-		
-		
+
+
 		for (Obstacle obs:data.getObstaclePositions()) {
-			
+
 			if (obs.p.x == positionRobot.x) {
 				double resultatY = positionRobot.y - obs.p.y;
-				
+
 				if (resultatY < 0 && 0 - resultatY < yMax) {
 					yMax = 0 - resultatY;
 				}else if (resultatY > 0 && 0 - resultatY > yMin) {
 					yMin = 0 - resultatY;
 				}
 			}
-			
+
 			if (obs.p.y == positionRobot.y) {
 				double resultatX = positionRobot.x - obs.p.x;
-				
+
 				if (resultatX < 0 && 0 - resultatX < xMax) {
 					xMax = 0 - resultatX;
 				}else if (resultatX > 0 && 0 - resultatX > xMin) {
@@ -394,7 +478,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 				}
 			}
 		}
-		
+
 		switch (direction) {
 		case NORD:
 			retour.setObstacleR(new Position(xMax, 0));
@@ -421,7 +505,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 			retour.setObstacleL(new Position(0, yMax));
 			break;
 		}
-		
+
 		return retour;
 	}
 }

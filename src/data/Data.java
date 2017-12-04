@@ -8,7 +8,10 @@ package data;
 
 import java.util.ArrayList;
 import specifications.DataService;
+import tools.Canape;
 import tools.Direction;
+import tools.Lit;
+import tools.ObjectObstacle;
 import tools.Obstacle;
 import tools.Position;
 
@@ -18,6 +21,7 @@ public class Data implements DataService{
 	private Position positionOrigine;
 	private Direction robotDirection;
 	private ArrayList<Obstacle> obstaclePositions;
+	private ArrayList<Object> obstacleObject;
 
 
 	int stepNumber;
@@ -35,7 +39,7 @@ public class Data implements DataService{
 	public Data(){
 
 		mapMinX = 0;
-		mapMaxX = 10;
+		mapMaxX = 12;
 		mapMinY = 0;
 		mapMaxY = 6;
 
@@ -45,6 +49,7 @@ public class Data implements DataService{
 		stepNumber = 0;
 
 		obstaclePositions = new ArrayList<Obstacle>();
+		obstacleObject = new ArrayList<Object>();
 
 	}
 
@@ -109,4 +114,32 @@ public class Data implements DataService{
 
 	@Override
 	public void setRobotInitPosition(Position p) {this.positionOrigine = p;}
+
+	@Override
+	public void addObstacleObject(Object obj) {
+		Class objClass = obj.getClass();
+		
+		obstacleObject.add(obj);
+		
+		ObjectObstacle objet = (ObjectObstacle) obj;
+		
+		addObstacleList(objet.getListPoints());
+		
+//		if (objClass == Canape.class) {
+//			Canape canape = (Canape) obj;
+//			addObstacleList(canape.getListPoints());
+//		}else if(objClass == Lit.class) {
+//			Lit lit = (Lit) obj;
+//			addObstacleList(lit.getListPoints());
+//		}
+		
+	}
+
+	@Override
+	public void addObstacleList(ArrayList<Obstacle> list) {
+		for (Obstacle obs: list) obstaclePositions.add(obs);
+	}
+
+	@Override
+	public ArrayList<Object> getObstacleObject() {return this.obstacleObject;}
 }

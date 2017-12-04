@@ -6,7 +6,10 @@
  * ******************************************************/
 package specifications;
 
+import java.util.ArrayList;
+
 import tools.Direction;
+import tools.Obstacle;
 import tools.Position;
 
 public interface WriteService {
@@ -15,4 +18,6 @@ public interface WriteService {
 	public void setStepNumber(int n);
 	void setRobotDirection(Direction direction);
 	void addObstaclePositions(double x, double y);
+	void addObstacleObject(Object obj);
+	void addObstacleList(ArrayList<Obstacle> list);
 }
