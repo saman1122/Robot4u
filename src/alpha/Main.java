@@ -19,7 +19,9 @@ import userInterface.Viewer;
 import algorithm.RobotIA;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -64,6 +66,12 @@ public class Main extends Application{
 		stage.setScene(scene);
 		stage.setWidth(HardCodedParameters.defaultWidth);
 		stage.setHeight(HardCodedParameters.defaultHeight);
+		
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		      @Override public void handle(WindowEvent event) {
+		        engine.stop();
+		      }
+		    });
 		stage.show();
 
 		timeline = new Timeline();
@@ -73,7 +81,6 @@ public class Main extends Application{
 		timer = new AnimationTimer() {
 			@Override
 			public void handle(long l) {
-				if(l%25==0)
 					scene.setRoot(((Viewer)viewer).getPanel());
 			}
 		};

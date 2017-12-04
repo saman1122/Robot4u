@@ -9,7 +9,7 @@ package tools;
 public class HardCodedParameters {
   //---HARD-CODED-PARAMETERS---//
   public static String defaultParamFileName = "in.parameters";
-  public static final int defaultWidth = 1280, defaultHeight = 1024;
+  public static final int defaultWidth = 1024, defaultHeight = 768;
   public static final int enginePaceMillis = 1000;
   public static final double spawnX = 3.0,
   							 spawnY = 1.0,

@@ -521,4 +521,9 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 
 		return retour;
 	}
+
+	@Override
+	public void stop() {
+		engineClock.cancel();
+	}
 }
