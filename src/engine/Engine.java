@@ -22,7 +22,6 @@ import specifications.AlgorithmService;
 import specifications.RequireAlgorithmService;
 
 import java.util.ArrayList;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -32,6 +31,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 	private DataService data;
 	private AlgorithmService algorithm;
 	private int start = 0;
+	private static final int nbrEssaiMaxRandom = 10;
 
 	public Engine(){}
 
@@ -120,7 +120,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 			
 			nbrEssai++;
 			
-			if (nbrEssai > 10) {
+			if (nbrEssai > nbrEssaiMaxRandom) {
 				initialPosRobot = new Position(0, 0);
 				onObstacle = false;
 			}
@@ -160,7 +160,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 
 			nbrTentative++;
 
-			if (nbrTentative > 10) new Exception();
+			if (nbrTentative > nbrEssaiMaxRandom) new Exception();
 		}
 
 		obj.setFirst(p);
