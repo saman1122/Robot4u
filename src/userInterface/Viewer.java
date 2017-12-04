@@ -13,6 +13,7 @@ import tools.Lit;
 import tools.ObjectObstacle;
 import tools.Obstacle;
 import tools.Position;
+import tools.TableBasse;
 import specifications.ViewerService;
 import specifications.Engine4ViewerService;
 import specifications.ReadService;
@@ -32,6 +33,7 @@ import javafx.scene.shape.Rectangle;
 public class Viewer implements ViewerService, RequireReadService, RequireStartEngineService{
 	private ReadService data;
 	private Engine4ViewerService engine;
+	private Image imgTableBasse, imgLit, imgCanape, imgChaise;
 
 	public Viewer(){}
 
@@ -47,6 +49,10 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 
 	@Override
 	public void init(){
+		imgCanape = new Image("file:src/images/canapeVueHaut.jpg");
+		imgLit = new Image("file:src/images/litVueHaut.jpg");
+		imgChaise = new Image("file:src/images/chaise.jpg");
+		imgTableBasse = new Image("file:src/images/tableBasse.jpg");
 	}
 
 	@Override
@@ -60,7 +66,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 		final int zoom=HardCodedParameters.zoom;
 
 		Group panel = new Group();
-		Rectangle heroesAvatar = new Rectangle(data.getRobotPosition().x*HardCodedParameters.zoom,data.getRobotPosition().y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
+		Rectangle heroesAvatar = new Rectangle(data.getRobotPosition().x*zoom,data.getRobotPosition().y*zoom,zoom,zoom);
 		heroesAvatar.setFill(Color.rgb(10,10,10));
 		heroesAvatar.setEffect(new Lighting());
 		//heroesAvatar.setTranslateX(data.getHeroesPosition().x);
@@ -68,7 +74,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 
 		//Limite map
 		//Image image = new Image("fond.jpg");
-		Rectangle limitMap = new Rectangle(data.getMapMinX()*HardCodedParameters.zoom,data.getMapMinY()*HardCodedParameters.zoom,(data.getMapMaxX()+1)*HardCodedParameters.zoom,(data.getMapMaxY()+1)*HardCodedParameters.zoom);
+		Rectangle limitMap = new Rectangle(data.getMapMinX()*zoom,data.getMapMinY()*zoom,(data.getMapMaxX()+1)*zoom,(data.getMapMaxY()+1)*zoom);
 		limitMap.setFill(Color.rgb(156,216,255,0.2));
 
 		//Grille
@@ -94,7 +100,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 		//Marquer passage checké
 		for(Position p:engine.getListPositionAlle())
 		{
-			Rectangle checked  = new Rectangle(p.x*HardCodedParameters.zoom,p.y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
+			Rectangle checked  = new Rectangle(p.x*zoom,p.y*zoom,zoom,zoom);
 			checked.setFill(Color.rgb(50,200,50,0.2));
 			panel.getChildren().add(checked);
 		}
@@ -102,7 +108,7 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 		//Génération d'obstacles
 		for(Obstacle o:data.getObstaclePositions())
 		{
-			Rectangle checked  = new Rectangle(o.p.x*HardCodedParameters.zoom,o.p.y*HardCodedParameters.zoom,HardCodedParameters.zoom,HardCodedParameters.zoom);
+			Rectangle checked  = new Rectangle(o.p.x*zoom,o.p.y*zoom,zoom,zoom);
 			checked.setFill(Color.RED);
 			panel.getChildren().add(checked);
 		}
@@ -115,11 +121,13 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 			ImageView img = null;
 			
 			if (obj.getClass() == Canape.class) {
-				img = new ImageView(new Image("file:src/images/canapeVueHaut.jpg"));
+				img = new ImageView(imgCanape);
 			} else if (obj.getClass() == Lit.class) {
-				img = new ImageView(new Image("file:src/images/litVueHaut.jpg"));
+				img = new ImageView(imgLit);
 			} else if (obj.getClass() == Chaise.class) {
-				img = new ImageView(new Image("file:src/images/chaise.jpg"));
+				img = new ImageView(imgChaise);
+			} else if (obj.getClass() == TableBasse.class) {
+				img = new ImageView(imgTableBasse);
 			}
 			
 			img.setTranslateX(objtO.getFirst().x*zoom);

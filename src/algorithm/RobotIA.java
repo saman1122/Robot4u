@@ -108,10 +108,10 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 			if (obs.p.y < yMin) yMin = (int) obs.p.y;
 			if (obs.p.y > yMax) yMax = (int) obs.p.y;
 		}
-		mapping = new int[xMax - xMin + 1][];
+		mapping = new int[yMax - yMin + 1][];
 
 		for (int i = 0; i < mapping.length; i++) {
-			mapping[i] = new int [yMax - yMin + 1];
+			mapping[i] = new int [xMax - xMin + 1];
 		}
 
 
@@ -122,11 +122,11 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 		}
 
 		for (Obstacle obs: listObstacle) {
-			mapping[(int)obs.p.x - xMin][(int)obs.p.y - yMin] = 1;
+			mapping[(int)obs.p.y - yMin][(int)obs.p.x - xMin] = 1;
 		}
 
 		for (Position p: listPositionAlle) {
-			mapping[(int)p.x - xMin][(int)p.y - yMin] = 2;
+			mapping[(int)p.y - yMin][(int)p.x - xMin] = 2;
 		}
 
 		for (int i = 0; i<mapping.length;i++) {

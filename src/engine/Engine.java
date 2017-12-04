@@ -17,6 +17,7 @@ import tools.ObjectObstacle;
 import tools.Obstacle;
 import tools.Position;
 import tools.SensorSimulator;
+import tools.TableBasse;
 import specifications.AlgorithmService;
 import specifications.RequireAlgorithmService;
 
@@ -74,6 +75,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		int nbrCanape = 1;
 		int nbrLit = 1;
 		int nbrChaise = 2;
+		int nbrTableBasse = 1;
 		try {
 			for (int i = 0; i < nbrCanape;i++)
 				data.addObstacleObject(createCanape());
@@ -89,6 +91,12 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		try {
 			for (int i = 0; i < nbrChaise;i++)
 				data.addObstacleObject(createChaise());
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		try {
+			for (int i = 0; i < nbrTableBasse;i++)
+				data.addObstacleObject(createTableBasse());
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -129,9 +137,10 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		boolean isNotNewPosition = true;
 		int nbrTentative = 0;
 		Position p = null;
-		ArrayList<Obstacle> listObstacle = new ArrayList<Obstacle>();
+		ArrayList<Obstacle> listObstacle = null;
 		while(isNotNewPosition) {
 			isNotNewPosition = false;
+			listObstacle = new ArrayList<Obstacle>();
 			p = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)(data.getMapMaxX() - obj.getHeight()) + 1 ),
 					ThreadLocalRandom.current().nextInt((int)data.getMapMinY(), (int)(data.getMapMaxY()- obj.getWidth()) + 1 ));
 
@@ -170,6 +179,10 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 
 	private Chaise createChaise() throws InstantiationException, IllegalAccessException {
 		return (Chaise) createObjectObstacle(Chaise.class);
+	}
+	
+	private TableBasse createTableBasse() throws InstantiationException, IllegalAccessException {
+		return (TableBasse) createObjectObstacle(TableBasse.class);
 	}
 
 	@Override
