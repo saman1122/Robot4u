@@ -1,4 +1,6 @@
-package tools;
+package data;
+
+import tools.Position;
 
 public class Obstacle {
 	public Position p;

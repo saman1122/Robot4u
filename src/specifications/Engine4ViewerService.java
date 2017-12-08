@@ -2,7 +2,7 @@ package specifications;
 
 import java.util.ArrayList;
 
-import tools.Obstacle;
+import data.Obstacle;
 import tools.Position;
 
 public interface Engine4ViewerService extends StartEngineService {

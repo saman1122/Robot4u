@@ -1,6 +1,8 @@
-package tools;
+package data;
 
 import java.util.ArrayList;
+
+import tools.Position;
 
 public class Chaise extends ObjectObstacle {
 

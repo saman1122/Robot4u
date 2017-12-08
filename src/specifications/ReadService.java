@@ -8,8 +8,9 @@ package specifications;
 
 import java.util.ArrayList;
 
+import data.Obstacle;
+import data.Vetement;
 import tools.Direction;
-import tools.Obstacle;
 import tools.Position;
 
 public interface ReadService {
@@ -25,4 +26,5 @@ public interface ReadService {
 	Direction getRobotDirection();
 	ArrayList<Obstacle> getObstaclePositions();
 	ArrayList<Object> getObstacleObject();
+	ArrayList<Vetement> getVetements();
 }

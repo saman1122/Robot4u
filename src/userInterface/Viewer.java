@@ -6,34 +6,36 @@
  * ******************************************************/
 package userInterface;
 
-import tools.Canape;
-import tools.Chaise;
 import tools.HardCodedParameters;
-import tools.Lit;
-import tools.ObjectObstacle;
-import tools.Obstacle;
 import tools.Position;
-import tools.TableBasse;
 import specifications.ViewerService;
 import specifications.Engine4ViewerService;
 import specifications.ReadService;
 import specifications.RequireReadService;
 import specifications.RequireStartEngineService;
 
+import java.net.NetworkInterface;
 import java.util.ArrayList;
 
+import data.Canape;
+import data.Chaise;
+import data.Lit;
+import data.ObjectObstacle;
+import data.Obstacle;
+import data.TableBasse;
+import data.TypeVetement;
+import data.Vetement;
 import javafx.scene.Group;
-import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 public class Viewer implements ViewerService, RequireReadService, RequireStartEngineService{
 	private ReadService data;
 	private Engine4ViewerService engine;
-	private Image imgTableBasse, imgLit, imgCanape, imgChaise;
+	private Image imgTableBasse, imgLit, imgCanape, imgChaise, imgRobotN, imgRobotS, imgRobotE, imgRobotW, 
+	imgVetementHaut, imgVetementBas;
 
 	public Viewer(){}
 
@@ -52,7 +54,13 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 		imgCanape = new Image("file:src/images/canapeVueHaut.jpg");
 		imgLit = new Image("file:src/images/litVueHaut.jpg");
 		imgChaise = new Image("file:src/images/chaise.jpg");
-		imgTableBasse = new Image("file:src/images/tableBasse.jpg");
+		imgTableBasse = new Image("file:src/images/tableBasse.png");
+		imgRobotN = new Image("file:src/images/robotN.png");
+		imgRobotS = new Image("file:src/images/robotS.png");
+		imgRobotE = new Image("file:src/images/robotE.png");
+		imgRobotW = new Image("file:src/images/robotW.png");
+		imgVetementBas = new Image("file:src/images/vetementBas.png");
+		imgVetementHaut = new Image("file:src/images/vetementHaut.png");
 	}
 
 	@Override
@@ -66,36 +74,33 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 		final int zoom=HardCodedParameters.zoom;
 
 		Group panel = new Group();
-		Rectangle heroesAvatar = new Rectangle(data.getRobotPosition().x*zoom,data.getRobotPosition().y*zoom,zoom,zoom);
-		heroesAvatar.setFill(Color.rgb(10,10,10));
-		heroesAvatar.setEffect(new Lighting());
-		//heroesAvatar.setTranslateX(data.getHeroesPosition().x);
-		//heroesAvatar.setTranslateY(data.getHeroesPosition().y);
+		ImageView heroesAvatar = null;
+
+		switch(data.getRobotDirection()) {
+		case NORD:
+			heroesAvatar = new ImageView(imgRobotN);
+			break;
+		case SUD:
+			heroesAvatar = new ImageView(imgRobotS);
+			break;
+		case EST:
+			heroesAvatar = new ImageView(imgRobotE);
+			break;
+		case OUEST:
+			heroesAvatar = new ImageView(imgRobotW);
+			break;
+		}
+
+		heroesAvatar.setTranslateX(data.getRobotPosition().x*zoom);
+		heroesAvatar.setTranslateY(data.getRobotPosition().y*zoom);
+		heroesAvatar.setFitHeight(1*zoom);
+		heroesAvatar.setFitWidth(1*zoom);
 
 		//Limite map
 		//Image image = new Image("fond.jpg");
 		Rectangle limitMap = new Rectangle(data.getMapMinX()*zoom,data.getMapMinY()*zoom,(data.getMapMaxX()+1)*zoom,(data.getMapMaxY()+1)*zoom);
 		limitMap.setFill(Color.rgb(156,216,255,0.2));
 
-		//Grille
-//		double epaisseurLine = 0.5;
-//		int tailleCase = HardCodedParameters.zoom;
-//
-//		for(int i=0; i<=data.getMapMaxX()+1; i++)
-//		{
-//			//lignes verticales
-//			Line l = new Line(tailleCase * i, data.getMapMinY(), tailleCase * i, (data.getMapMaxY()+1)*tailleCase ); 
-//			l.setStrokeWidth(epaisseurLine);
-//			l.setStroke(Color.BLACK);
-//			panel.getChildren().add(l);
-//			if(i<=data.getMapMaxY()+1)
-//			{     //lignes horizontales
-//				l = new Line(data.getMapMinX(), tailleCase * i, (data.getMapMaxX()+1)*tailleCase, tailleCase * i ); 
-//				l.setStrokeWidth(epaisseurLine);
-//				l.setStroke(Color.BLACK);
-//				panel.getChildren().add(l);
-//			}
-//		}
 
 		//Marquer passage checké
 		for(Position p:engine.getListPositionAlle())
@@ -112,14 +117,33 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 			checked.setFill(Color.RED);
 			panel.getChildren().add(checked);
 		}
-		
-		//Generation obstacle objets
-		
-		for(Object obj: data.getObstacleObject()) {
+
+		//Génération vetements
+		for(Vetement v:data.getVetements())
+		{
+			ImageView img = null;
+			Rectangle checked  = new Rectangle(v.getPosition().x*zoom,v.getPosition().y*zoom,zoom,zoom);
 			
+			img = new ImageView(imgVetementBas);
+			if (v.getType() == TypeVetement.HAUT) {
+				img = new ImageView(imgVetementHaut);
+			}
+			
+			img.setTranslateX(v.getPosition().x*zoom);
+			img.setTranslateY(v.getPosition().y*zoom);
+			img.setFitHeight(1*zoom);
+			img.setFitWidth(1*zoom);
+			
+			panel.getChildren().add(img);
+		}
+
+		//Generation obstacle objets
+
+		for(Object obj: data.getObstacleObject()) {
+
 			ObjectObstacle objtO = (ObjectObstacle) obj;
 			ImageView img = null;
-			
+
 			if (obj.getClass() == Canape.class) {
 				img = new ImageView(imgCanape);
 			} else if (obj.getClass() == Lit.class) {
@@ -129,14 +153,14 @@ public class Viewer implements ViewerService, RequireReadService, RequireStartEn
 			} else if (obj.getClass() == TableBasse.class) {
 				img = new ImageView(imgTableBasse);
 			}
-			
+
 			img.setTranslateX(objtO.getFirst().x*zoom);
 			img.setTranslateY(objtO.getFirst().y*zoom);
 			img.setFitHeight(objtO.getHeight()*zoom);
 			img.setFitWidth(objtO.getWidth()*zoom);
 
 			panel.getChildren().add(img);
-			
+
 		}
 
 		//Génération miniMap

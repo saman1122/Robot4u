@@ -8,7 +8,8 @@ package specifications;
 
 import java.util.ArrayList;
 
-import tools.Obstacle;
+import data.Obstacle;
+import tools.Direction;
 import tools.Position;
 
 public interface AlgorithmService{
@@ -17,4 +18,5 @@ public interface AlgorithmService{
 	public int[][] getMapping();
 	public ArrayList<Position> getListPositionAlle();
 	public ArrayList<Obstacle> getListObstacle();
+	public Direction getDirection();
 }

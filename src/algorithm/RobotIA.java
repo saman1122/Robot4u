@@ -9,15 +9,16 @@ package algorithm;
 import specifications.AlgorithmService;
 import specifications.SimulatorService;
 import tools.Direction;
-import tools.Obstacle;
 import tools.Position;
-import tools.SensorSimulator;
 import specifications.RequireSimulatorService;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import data.Obstacle;
+import engine.SensorSimulator;
 
 public class RobotIA implements AlgorithmService, RequireSimulatorService{
 	private SimulatorService simulator;
@@ -378,4 +379,7 @@ public class RobotIA implements AlgorithmService, RequireSimulatorService{
 
 	@Override
 	public ArrayList<Obstacle> getListObstacle() {return listObstacle;}
+
+	@Override
+	public Direction getDirection() {return direction;}
 }

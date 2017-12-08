@@ -8,8 +8,9 @@ package specifications;
 
 import java.util.ArrayList;
 
+import data.Obstacle;
+import data.Vetement;
 import tools.Direction;
-import tools.Obstacle;
 import tools.Position;
 
 public interface WriteService {
@@ -20,4 +21,10 @@ public interface WriteService {
 	void addObstaclePositions(double x, double y);
 	void addObstacleObject(Object obj);
 	void addObstacleList(ArrayList<Obstacle> list);
+	void setMapMinX(double mapMinX);
+	void setMapMaxX(double mapMaxX);
+	void setMapMinY(double mapMinY);
+	void setMapMaxY(double mapMaxY);
+	void addVetement(Vetement vetement);
+	void setVetements(ArrayList<Vetement> listVetement);
 }

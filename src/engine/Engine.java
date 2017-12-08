@@ -9,20 +9,25 @@ package engine;
 import specifications.EngineService;
 import specifications.DataService;
 import specifications.RequireDataService;
-import tools.Canape;
-import tools.Chaise;
 import tools.Direction;
-import tools.Lit;
-import tools.ObjectObstacle;
-import tools.Obstacle;
+import tools.HardCodedParameters;
 import tools.Position;
-import tools.SensorSimulator;
-import tools.TableBasse;
 import specifications.AlgorithmService;
 import specifications.RequireAlgorithmService;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+
+import data.Canape;
+import data.Chaise;
+import data.Lit;
+import data.ObjectObstacle;
+import data.Obstacle;
+import data.TableBasse;
+import data.TypeVetement;
+import data.Vetement;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,7 +35,6 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 	private Timer engineClock;
 	private DataService data;
 	private AlgorithmService algorithm;
-	private int start = 0;
 	private static final int nbrEssaiMaxRandom = 10;
 
 	public Engine(){}
@@ -49,6 +53,44 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 	public void init(){
 		engineClock = new Timer();
 
+		//Generation taille map
+
+		int maxX = HardCodedParameters.maxX;
+		int maxY = HardCodedParameters.maxY;
+
+		data.setMapMinY(0);
+		data.setMapMinX(0);
+		data.setMapMaxY(ThreadLocalRandom.current().nextInt(4, maxY + 1));
+		data.setMapMaxX(ThreadLocalRandom.current().nextInt(8, maxX + 1));
+
+		//initialisation position robot
+
+		boolean onObstacle = true;
+		int nbrEssai = 0;
+		Position initialPosRobot = null;
+
+		while (onObstacle) {
+			onObstacle = false;
+			initialPosRobot = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)data.getMapMaxX() + 1),
+					ThreadLocalRandom.current().nextInt((int)data.getMapMinY(), (int)data.getMapMaxY() + 1));
+
+			ArrayList<Obstacle> obstacles = data.getObstaclePositions();
+
+			for (Obstacle obs:obstacles) {
+				if(obs.p.equals(initialPosRobot)) onObstacle = true;
+			}
+
+			nbrEssai++;
+
+			if (nbrEssai > nbrEssaiMaxRandom) {
+				initialPosRobot = new Position(0, 0);
+				onObstacle = false;
+			}
+
+		}
+
+		data.setRobotPosition(initialPosRobot);
+		data.setRobotInitPosition(initialPosRobot);
 
 		//		//Creation des obstacles
 		//		int nbrObstacles = 15;
@@ -84,7 +126,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		}
 		try {
 			for (int i = 0; i < nbrLit;i++)
-			data.addObstacleObject(createLit());
+				data.addObstacleObject(createLit());
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
@@ -100,35 +142,41 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
+		
 
-		//initialisation position robot
+		//Ajout vetements
+		int nbrVetement = 4;
 
-		boolean onObstacle = true;
-		int nbrEssai = 0;
-		Position initialPosRobot = null;
+		for (int i = 0; i < nbrVetement; i++) {
+			Vetement vetement = new Vetement();
+			boolean isNotNewPosition = true;
+			Position p = null;
+			while(isNotNewPosition) {
+				isNotNewPosition = false;
 
-		while (onObstacle) {
-			onObstacle = false;
-			initialPosRobot = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)data.getMapMaxX() + 1),
-					ThreadLocalRandom.current().nextInt((int)data.getMapMinY(), (int)data.getMapMaxY() + 1));
+				p = new Position(ThreadLocalRandom.current().nextInt((int)data.getMapMinX(), (int)data.getMapMaxX() + 1),
+						ThreadLocalRandom.current().nextInt((int)data.getMapMinY(), (int)data.getMapMaxY() + 1));
 
-			ArrayList<Obstacle> obstacles = data.getObstaclePositions();
-
-			for (Obstacle obs:obstacles) {
-				if(obs.p.equals(initialPosRobot)) onObstacle = true;
+				ArrayList<Obstacle> listObstacles = data.getObstaclePositions();
+				for(Obstacle obs: listObstacles) {
+					if (p.equals(obs.p)) isNotNewPosition = true;
+				}
 			}
-			
-			nbrEssai++;
-			
-			if (nbrEssai > nbrEssaiMaxRandom) {
-				initialPosRobot = new Position(0, 0);
-				onObstacle = false;
+			TypeVetement typeVetement;
+
+			//Aleatoire type vetement
+			typeVetement = TypeVetement.BAS;
+
+			if (new Random().nextBoolean()) {
+				typeVetement = TypeVetement.HAUT;
 			}
 
+			vetement.setType(typeVetement);
+			vetement.setPosition(p);
+			
+			data.addVetement(vetement);
 		}
 
-		data.setRobotPosition(initialPosRobot);
-		data.setRobotInitPosition(initialPosRobot);
 
 	}
 
@@ -180,7 +228,7 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 	private Chaise createChaise() throws InstantiationException, IllegalAccessException {
 		return (Chaise) createObjectObstacle(Chaise.class);
 	}
-	
+
 	private TableBasse createTableBasse() throws InstantiationException, IllegalAccessException {
 		return (TableBasse) createObjectObstacle(TableBasse.class);
 	}
@@ -192,16 +240,12 @@ public class Engine implements EngineService, RequireDataService, RequireAlgorit
 			@Override
 			public void run() {
 
-				start++;
-				if(start>2)
-				{
-					System.out.println("\n --------Heroes position: "+data.getRobotPosition().x+", "+data.getRobotPosition().y);
+				System.out.println("\n --------Heroes position: "+data.getRobotPosition().x+", "+data.getRobotPosition().y);
 
-					algorithm.stepAction();
+				algorithm.stepAction();
 
-					data.setStepNumber(data.getStepNumber()+1);
-
-				}
+				data.setStepNumber(data.getStepNumber()+1);
+				data.setRobotDirection(algorithm.getDirection());
 			}
 		},0,400);
 	}

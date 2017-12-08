@@ -6,8 +6,8 @@
  * ******************************************************/
 package specifications;
 
+import engine.SensorSimulator;
 import tools.Direction;
-import tools.SensorSimulator;
 
 public interface SimulatorService{
 int moveLeftCheck(Direction direction);

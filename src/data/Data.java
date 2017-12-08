@@ -8,11 +8,7 @@ package data;
 
 import java.util.ArrayList;
 import specifications.DataService;
-import tools.Canape;
 import tools.Direction;
-import tools.Lit;
-import tools.ObjectObstacle;
-import tools.Obstacle;
 import tools.Position;
 
 public class Data implements DataService{
@@ -22,35 +18,51 @@ public class Data implements DataService{
 	private Direction robotDirection;
 	private ArrayList<Obstacle> obstaclePositions;
 	private ArrayList<Object> obstacleObject;
+	private ArrayList<Vetement> listVetement;
 
 
 	int stepNumber;
 
-	double mapMinX;
-	double mapMaxX;
-	double mapMinY;
-	double mapMaxY;
+	private double mapMinX;
+	private double mapMaxX;
+	private double mapMinY;
+	private double mapMaxY;
 
-	double miniMapMinX;
-	double miniMapMaxX;
-	double miniMapMinY;
-	double miniMapMaxY;
+	private double miniMapMinX;
+	private double miniMapMaxX;
+	private double miniMapMinY;
+	private double miniMapMaxY;
 
 	public Data(){
-
-		mapMinX = 0;
-		mapMaxX = 12;
-		mapMinY = 0;
-		mapMaxY = 6;
-
-		miniMapMinX = mapMaxX+1;
-		miniMapMinY = mapMinY;
-
+		
 		stepNumber = 0;
 
+		listVetement = new ArrayList<Vetement>();
 		obstaclePositions = new ArrayList<Obstacle>();
 		obstacleObject = new ArrayList<Object>();
 
+	}
+	
+	@Override
+	public void setMapMinX(double mapMinX) {
+		this.mapMinX = mapMinX;
+	}
+	
+	@Override
+	public void setMapMaxX(double mapMaxX) {
+		this.mapMaxX = mapMaxX;
+		this.miniMapMinX = this.mapMaxX+1;
+	}
+	
+	@Override
+	public void setMapMinY(double mapMinY) {
+		this.mapMinY = mapMinY;
+	}
+	
+	@Override
+	public void setMapMaxY(double mapMaxY) {
+		this.mapMaxY = mapMaxY;
+		this.miniMapMinY = this.mapMinY;
 	}
 
 	@Override
@@ -125,14 +137,6 @@ public class Data implements DataService{
 		
 		addObstacleList(objet.getListPoints());
 		
-//		if (objClass == Canape.class) {
-//			Canape canape = (Canape) obj;
-//			addObstacleList(canape.getListPoints());
-//		}else if(objClass == Lit.class) {
-//			Lit lit = (Lit) obj;
-//			addObstacleList(lit.getListPoints());
-//		}
-		
 	}
 
 	@Override
@@ -142,4 +146,17 @@ public class Data implements DataService{
 
 	@Override
 	public ArrayList<Object> getObstacleObject() {return this.obstacleObject;}
+	
+	@Override
+	public ArrayList<Vetement> getVetements() {return this.listVetement;}
+	
+	@Override 
+	public void addVetement(Vetement vetement) {
+		this.listVetement.add(vetement);
+	}
+	
+	@Override 
+	public void setVetements(ArrayList<Vetement> listVetement) {
+		this.listVetement = listVetement;
+	}
 }

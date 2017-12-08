@@ -1,4 +1,6 @@
-package tools;
+package engine;
+
+import tools.Position;
 
 public class SensorSimulator {
 	private Position obstacleL;
